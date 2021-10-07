@@ -1,0 +1,42 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '5.2.0'
+}
+
+group 'fr.uiytt'
+version '0.1'
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven { url = 'https://oss.sonatype.org/content/repositories/snapshots' }
+    maven { url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
+    maven { url "https://jitpack.io" }
+    maven { url = 'https://ci.ender.zone/plugin/repository/everything/'}
+    maven { url = 'https://maven.enginehub.org/repo/'}
+
+}
+
+dependencies {
+    compileOnly 'org.spigotmc:spigot-api:1.17.1-R0.1-SNAPSHOT'
+    implementation 'fr.minuskube.inv:smart-invs:1.2.7'
+    implementation 'com.github.simplix-softworks:simplixstorage:3.2.1'
+    implementation 'com.sk89q.worldedit:worldedit-core:7.2.6'
+    implementation 'com.sk89q.worldedit:worldedit-bukkit:7.2.6'
+}
+
+shadowJar {
+    dependencies {
+        include(dependency('fr.minuskube.inv:smart-invs:1.2.7'))
+        include(dependency('com.github.simplix-softworks:simplixstorage:3.2.1'))
+    }
+}
+
+processResources {
+    filter ReplaceTokens, tokens: ["version": project.property("version")], beginToken : '{.', endToken : '.}'
+}
+
+build.dependsOn(shadowJar)
+
+

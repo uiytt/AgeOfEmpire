@@ -1,0 +1,14 @@
+main: fr.uiytt.ageofempire.AgeOfEmpire
+name: AgeOfEmpire
+version: {.version.}
+author: uiytt
+description: A recreation of the AOE game from Epicube. A game for 4 teams with base building
+api-version: 1.14
+depend: [WorldEdit]
+commands:
+  ageofempire:
+    description: All the commands for AgeOfEmpire
+    usage: /ageofempire <start|stop|force|team|reload|config>
+    aliases:
+      - aoe
+      - a
