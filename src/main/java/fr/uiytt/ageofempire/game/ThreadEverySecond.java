@@ -6,6 +6,12 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class ThreadEverySecond {
 
+	/**
+	 * Thread run every second that time the game and handle things like pvp timer and other.
+	 * The thread automatically stop itself when the GameManager instance is no longer active.
+	 * @param plugin Instance of the plugin
+	 * @param game Current instance of {@link GameManager}
+	 */
 	public void init(Plugin plugin, GameManager game) {
 		new SecondRunnable(game).runTaskTimer(plugin, 1, 20);
 	}

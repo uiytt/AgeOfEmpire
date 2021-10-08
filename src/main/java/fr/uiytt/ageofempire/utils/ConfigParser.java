@@ -5,6 +5,11 @@ import org.bukkit.Location;
 
 public class ConfigParser {
 
+    /**
+     * For a given string of coordinates, return a location in the Config World
+     * @param locString a string either "x y z" or "x y z yaw pitch"
+     * @return a location in {@link ConfigManager#getWorld()}
+     */
     public static Location stringToLocation(String locString) {
         String[] string = locString.split(" ");
 

@@ -19,26 +19,37 @@ public class GameTeam {
 	private final String name;
 	private TeamBase teamBase;
 
-
+	/**
+	 * A team of players, and their base
+	 * Teams already exist before the game start, to allow players to join.
+	 * @param color {@link ColorLink} of the team
+	 * @param name Name of the team
+	 *
+	 * @see GameData for all the instances of the teams
+	 */
 	public GameTeam(ColorLink color, String name) {
 		this.color = color;
 		this.name = name;
 	}
 
+	/**
+	 * At the start of game, assign a new {@link TeamBase}
+	 */
 	public void registerTeamBase() {
 		teamBase = new TeamBase(this);
 	}
 
 	/**
 	 * This return only a COPY of the list of players, you cannot modify the players here,
-	 * see addPlayer(), removePlayer()
+	 * @see #addPlayer(UUID)
+	 * @see #removePlayer(UUID)
 	 */
 	public List<UUID> getPlayersUUIDs() {
 		return List.copyOf(playersUUIDs);
 	}
 	
 	/**
-	 * This add a player to the team
+	 * This adds a player to the team
 	 * @param playerUUID if of the player, produce an error if the player is not online
 	 */
 	public void addPlayer(UUID playerUUID) throws PlayerFromUUIDNotFoundException {
@@ -65,13 +76,16 @@ public class GameTeam {
 		}
 	}
 
+	/**
+	 * Remove all players from this team.
+	 */
 	public void removeAllPlayers() {
 		GameManager.getGameInstance().getGameData().getPlayersTeam().clear();
 		playersUUIDs.clear();
 	}
 	
 	/**
-	 * This register new teams in function of the number of player, the size of the team etc..
+	 * This register new teams depending on the number of player, the size of the teams etc...
 	 */
 	public static void reorganizeTeam() {
 		GameData gameData = GameManager.getGameInstance().getGameData();

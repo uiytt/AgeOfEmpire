@@ -32,6 +32,11 @@ public class TeamBase {
     private int age = 1;
     private boolean forumAlive = true;
 
+    /**
+     * All data linked to the game of the team
+     * Information such as ressources, Age and plots are stored here.
+     * @param team a team of players
+     */
     public TeamBase(GameTeam team) {
         this.gameTeam = team;
         this.yamlBase = new Yaml("config.yml", "plugins" + File.separator + "AgeOfEmpire" + File.separator + team.getColor().name());
@@ -53,6 +58,9 @@ public class TeamBase {
         villager.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(100);
     }
 
+    /**
+     * Update for all players of the team, the ressources in the scoreboard
+     */
     public void updateTeamScoreboard() {
         HashMap<UUID, Integer> gold = GameManager.getGameInstance().getGameData().getGold();
         for(UUID playerUUID : gameTeam.getPlayersUUIDs()) {

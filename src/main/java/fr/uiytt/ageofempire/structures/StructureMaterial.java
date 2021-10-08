@@ -7,6 +7,10 @@ package fr.uiytt.ageofempire.structures;
 import org.bukkit.Material;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * List of {@link Material} that need to be paste after all the other blocs
+ * @author SamB440
+ */
 @SuppressWarnings("unused")
 public enum StructureMaterial {
     SIGN(true),
@@ -148,19 +152,7 @@ public enum StructureMaterial {
     public boolean isDelayed() {
         return delayed;
     }
-    
 
-/*    @Nullable
-    public static StructureMaterial fromTag(NBTTagCompound nbtTagCompound) {
-        try {
-            return StructureMaterial.valueOf(nbtTagCompound.getString("Id").
-                    replace("minecraft:", "").
-                    toUpperCase());
-        } catch (IllegalArgumentException ignored) {
-            return null;
-        }
-    }
-*/
     @Nullable
     public static StructureMaterial fromBukkit(Material material) {
         try {

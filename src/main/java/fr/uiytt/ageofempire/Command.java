@@ -24,47 +24,44 @@ public class Command implements CommandExecutor, TabCompleter {
             return true;
         }
         switch (args[0]) {
-            case "start":
+            case "start" -> {
                 if (GameManager.getGameInstance().getGameData().isGameRunning()) {
                     sender.sendMessage("déjà commencé");
                     break;
                 }
                 GameManager.getGameInstance().init(new ArrayList<>(Bukkit.getServer().getOnlinePlayers()));
                 Bukkit.broadcastMessage("ça commence");
-            break;
-            case "stop":
+            }
+            case "stop" -> {
                 if (!GameManager.getGameInstance().getGameData().isGameRunning()) {
                     sender.sendMessage("pas commencé");
                     break;
                 }
                 GameManager.getGameInstance().stopGame();
                 Bukkit.broadcastMessage("ça stop");
-            break;
-            case "team":
+            }
+            case "team" -> {
                 if (args.length < 2 || !(sender instanceof Player)) {
                     return false;
                 }
                 try {
                     Player player = (Player) sender;
-                    GameTeam team = GameManager.getGameInstance().getGameData().getTeams().get(Integer.parseInt(args[1])-1);
+                    GameTeam team = GameManager.getGameInstance().getGameData().getTeams().get(Integer.parseInt(args[1]) - 1);
                     team.addPlayer(player.getUniqueId());
                     player.sendMessage("tu as rejoins la team " + team.getColor().getChatColor() + team.getName());
                 } catch (PlayerFromUUIDNotFoundException e) {
                     e.printStackTrace();
                     return false;
                 }
-            break;
-            case "test":
-                if (!(sender instanceof Player)) {
+            }
+            case "test" -> {
+                if (!(sender instanceof Player player)) {
                     return false;
                 }
-                Player player = (Player) sender;
-                if(!GameManager.getGameInstance().getGameData().isGameRunning()) return false;
+                if (!GameManager.getGameInstance().getGameData().isGameRunning()) return false;
                 GameTeam playerTeam = GameManager.getGameInstance().getGameData().getPlayersTeam().get(player.getUniqueId());
-                player.getInventory().addItem(Utils.newItemStack(playerTeam.getColor().getWool(), BuildingType.FORGE.getDisplayName(),List.of("&8"+BuildingType.FORGE.getDisplayName(),"&8AOE")));
-
-            break;
-
+                player.getInventory().addItem(Utils.newItemStack(playerTeam.getColor().getWool(), BuildingType.FORGE.getDisplayName(), List.of("&8" + BuildingType.FORGE.getDisplayName(), "&8AOE")));
+            }
         }
         return true;
     }

@@ -44,7 +44,12 @@ public class Plot {
         }
     }
 
-
+    /**
+     * Start the construction of the corresponding building in this plot
+     * @param playerTeam The team construction the plot
+     * @param buildingType The type of building constructed
+     * @param building An instance of a building to store information
+     */
     public void build(GameTeam playerTeam, BuildingType buildingType,Building building) {
         building.setInConstruction(true);
         building.setPlotLocation(location);
@@ -52,12 +57,11 @@ public class Plot {
         File structureFile = new File("plugins" + File.separator + "AgeOfEmpire" + File.separator + playerTeam.getColor().name() + File.separator +  buildingType.name() + "-" + side + ".yml");
         Structure structure = new Structure(AgeOfEmpire.getInstance(), structureFile, building);
         try {
-            long time = System.currentTimeMillis();
-            structure.loadStructure();
-            System.out.println("Loading structure took " + (System.currentTimeMillis() - time));
-            structure.pastStructure(location, buildingType.getTime());
+            structure.loadStructure().pastStructure(location, buildingType.getTime());
         } catch (StructureNotLoadedException e) {
             e.printStackTrace();
+            building.setInConstruction(false);
+            constructed = false;
         }
     }
 

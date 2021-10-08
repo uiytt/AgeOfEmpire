@@ -15,7 +15,6 @@ public class AgeOfEmpire extends JavaPlugin {
     private static AgeOfEmpire instance;
     private static Logger logger;
     private static InventoryManager InvManager;
-    public static long time;
 
     public void onEnable() {
         instance = this;

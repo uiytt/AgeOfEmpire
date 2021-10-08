@@ -27,12 +27,20 @@ public class GameManager {
 	private final GameData gameData;
 	private final World world;
 
-	
+	/**
+	 * Main methods linked to the game
+	 * There can only be one instance of GameManager at the time, see {@link GameManager#getGameInstance()} to get it
+	 * GameManager has a {@link GameData} to store all the information of the game
+	 */
 	public GameManager() {
 		gameData = new GameData();
 		world = ConfigManager.getWorld();
 	}
-	
+
+	/**
+	 * Start everything for the game
+	 * @param players List of players playing
+	 */
 	public void init(List<Player> players) {
 		List<UUID> playersUUID = new ArrayList<>();
 		for(Player player : players) {
@@ -53,7 +61,9 @@ public class GameManager {
 		new ThreadEverySecond().init(AgeOfEmpire.getInstance(), this);
 	}
 
-
+	/**
+	 * Fill all {@link GameTeam} with players who didn't join any team.
+	 */
 	private void fillTeams() {
 		List<UUID> playersUUID = new ArrayList<>(gameData.getAlivePlayers());
 		Collections.shuffle(playersUUID);
@@ -73,7 +83,7 @@ public class GameManager {
 		}
 	}
 
-	/**
+	/* //Need to be reimplemented
 	private void removePlayersFromConfig() {
 		Bukkit.getOnlinePlayers().forEach(HumanEntity::closeInventory);
 		StartItemsMenu.getPlayersModifyingItems().clear();
@@ -81,7 +91,9 @@ public class GameManager {
 		StartItemsMenu.getPlayersInventory().clear();
 	}**/
 
-	//Define world border and time
+	/**
+	 * Define world border and time
+	 */
 	private void initWorld() {
 		World world = ConfigManager.getWorld();
 		world.setTime(0);
@@ -91,6 +103,12 @@ public class GameManager {
 
 
 	}
+
+	/**
+	 * Find spawn coordinates of the players, reset the player's data
+	 * and spawn the player.
+	 * @param players
+	 */
 	private void startPlayerTP(List<Player> players) {
 		players.forEach(player -> {
 			for(PotionEffect potion : player.getActivePotionEffects()) {player.removePotionEffect(potion.getType());}
@@ -117,6 +135,7 @@ public class GameManager {
 
 	/**
 	 * End the game and reset everything
+	 * Always create a new instance of {@link GameManager} for a new game
 	 */
 	public void stopGame() {
 		List<Player> players = world.getPlayers();

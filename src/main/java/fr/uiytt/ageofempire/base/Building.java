@@ -21,6 +21,11 @@ public class Building {
     private long lastWarning = System.currentTimeMillis();
     private Location plotLocation = new Location(ConfigManager.getWorld(), 0, 0, 0);
 
+    /**
+     * An object storing all the information related to a building constructed in game.
+     * @param buildingType The type of building
+     * @param teamBase The base in which the building is constructed
+     */
     public Building(BuildingType buildingType, TeamBase teamBase) {
         this.buildingType = buildingType;
         this.teamBase = teamBase;

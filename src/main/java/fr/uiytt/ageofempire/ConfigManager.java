@@ -8,6 +8,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Handle the main config file
+ * Currently not loading the config, need to be improved
+ */
 public class ConfigManager {
 
     private static World world;

@@ -27,7 +27,6 @@ import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -35,10 +34,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 
-/**
- * Allow to copy & past structure using information from files
- *
- */
+
 public class Structure {
 
     private final AgeOfEmpire plugin;
@@ -48,15 +44,16 @@ public class Structure {
     private int width = 0;
     private int height = 0;
     private int length = 0;
-    private Location structureCoordinates;
-    private File schematicFile;
     private Location villagerRelativeCoordinates;
 
     private final LinkedHashMap<BlockVector3, BaseBlock> blocks = new LinkedHashMap<>();
 
     /**
-     * @param plugin your plugin instance
-     * @param structureInfo file to the info of the structure
+     * Create a Structure object handling loading and pasting of a schematic
+     * At the end, it spawns a villager
+     * @param plugin JavaPlugin instance
+     * @param structureInfo Yaml File with information such as schematic location, and villager coordinates
+     * @param building {@link Building} of a Team, mainly to prevent multiple instancies of this building in the same team.
      */
     public Structure(AgeOfEmpire plugin, File structureInfo, Building building) {
         this.plugin = plugin;
@@ -65,14 +62,14 @@ public class Structure {
     }
 
     /**
-     * Load the structure & villager information
+     * Load blocks from schematics
+     * Should be called before {@link #pastStructure(Location, int)}
+     * @return Structure to paste
+     * @exception StructureNotLoadedException if the schematic could not be found.
      */
-    @Nullable
-    public Structure loadStructure() {
+    public Structure loadStructure() throws StructureNotLoadedException {
         Yaml structureYaml = new Yaml(structureInfoFile);
-
-        structureCoordinates = ConfigParser.stringToLocation(structureYaml.getOrDefault("structure.coordinates","0 0 0"));
-        schematicFile = new File(structureInfoFile.getParent() + File.separator + "schematics" + File.separator + structureYaml.get("schem-path"));
+        File schematicFile = new File(structureInfoFile.getParent() + File.separator + "schematics" + File.separator + structureYaml.get("schem-path"));
 
         villagerRelativeCoordinates = ConfigParser.stringToLocation(structureYaml.getOrDefault("villager.coordinates","0 0 0"));
         HashMap<BlockVector3, BaseBlock> delayedBlocks = new HashMap<>();
@@ -86,23 +83,23 @@ public class Structure {
             height = clipboard.getDimensions().getBlockY();
             length = clipboard.getDimensions().getBlockZ();
         } catch (Exception e) {
-            AgeOfEmpire.getLog().severe("File " + schematicFile.getAbsolutePath() + " was not found.");
-            return null;
+            throw new StructureNotLoadedException("File " + schematicFile.getAbsolutePath() + " was not found.");
         }
 
-        for (int y = 0; y < height; y++) {
+        for (int y = 0; y < height; y++) { //For y first to have the structure built by layer.
             for (int x = 0; x < width; x++) {
                 for (int z = 0; z < length; z++) {
                     BlockVector3 vector = BlockVector3.at(x, y - 1, z).add(clipboard.getOrigin());
                     BaseBlock block = clipboard.getFullBlock(vector);
                     if(block.getBlockType().getMaterial().isAir()) continue;
+
                     StructureMaterial structureMaterial;
                     try {
                         structureMaterial = StructureMaterial.valueOf(block.getBlockType().getMaterial().toString());
                     }  catch (IllegalArgumentException illegalArgumentException) {
                         structureMaterial = null;
                     }
-                    if (structureMaterial == null || !structureMaterial.isDelayed()) {
+                    if (structureMaterial == null || !structureMaterial.isDelayed()) { //Check if the block should be placed at the end.
                         blocks.put(BlockVector3.at(x, y, z), block);
                     } else {
                         delayedBlocks.put(BlockVector3.at(x, y, z), block);
@@ -110,28 +107,7 @@ public class Structure {
                 }
             }
         }
-        blocks.putAll(delayedBlocks);
-        /*
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                for (int z = 0; z < length; z++) {
-                    Vector vector = new Vector(x, y, z);
-                    Block block = ConfigManager.getWorld().getBlockAt(structureCoordinates.getBlockX() + x, structureCoordinates.getBlockY() + y, structureCoordinates.getBlockZ() + z);
-
-                    if(block.getType() == Material.AIR) continue;
-                    StructureMaterial structureMaterial = StructureMaterial.fromBukkit(block.getType());
-                    if (StructureMaterial.fromBukkit(block.getType()) == null || structureMaterial == null || !structureMaterial.isDelayed()) {
-                        blocks.put(vector, block.getBlockData());
-                    } else {
-                        delayedBlocks.put(vector, block.getBlockData());
-                    }
-
-                }
-            }
-        }
-        //Add delayed blocks at the end of the LinkedHashMap
-        delayedBlocks.forEach(blocks::put);
-        */
+        blocks.putAll(delayedBlocks); //Since blocks is a List with order, at the delayed blocks at the end of the list.
         return this;
     }
 
@@ -158,6 +134,9 @@ public class Structure {
             private final World world = ConfigManager.getWorld();
             private int timer = 0;
 
+            /**
+             * Paste a number of blocks per second.
+             */
             @Override
             public void run() {
                 if(!GameManager.getGameInstance().getGameData().isGameRunning()) {

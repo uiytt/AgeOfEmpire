@@ -18,19 +18,19 @@ import java.util.UUID;
 
 public class GameScoreboard {
 
-	private static HashMap<UUID, GameScoreboard> playersScoreboard = new HashMap<>();
+	private static final HashMap<UUID, GameScoreboard> playersScoreboard = new HashMap<>();
 
-	private final UUID playerUUID;
 	private final Scoreboard scoreboard;
-
 	private final List<Score> scorelist = new ArrayList<>();
 
+	/**
+	 * A scoreboard for the game for each player
+	 */
 	public GameScoreboard(UUID playerUUID) {
-		this.playerUUID = playerUUID;
 		ScoreboardManager scoreboardManager = Bukkit.getScoreboardManager();
 		scoreboard = Objects.requireNonNull(scoreboardManager).getNewScoreboard();
 
-		playersScoreboard.put(playerUUID, this);
+		playersScoreboard.put(playerUUID, this); //Store the scoreboard instance
 	}
 
 	//Based on https://www.spigotmc.org/wiki/making-scoreboard-with-teams-no-flicker/ 
@@ -40,9 +40,9 @@ public class GameScoreboard {
 		Objective obj = scoreboard.registerNewObjective("title","dummy",ChatColor.DARK_GRAY + "»" + ChatColor.YELLOW + "" + ChatColor.BOLD + "AgeOfEmpire" + ChatColor.DARK_GRAY + "«");
 		obj.setDisplaySlot(DisplaySlot.SIDEBAR);
 
-		scorelist.add(obj.getScore(ChatColor.MAGIC + "" + ChatColor.GRAY));
 
 		//Timer
+		scorelist.add(obj.getScore(ChatColor.MAGIC + "" + ChatColor.GRAY));
 		scorelist.add(obj.getScore(ChatColor.RED + "" + ChatColor.BOLD + "      Timer"));
 
 		Team timeCounter = scoreboard.registerNewTeam("AOE_Timer");
@@ -60,8 +60,8 @@ public class GameScoreboard {
 		assaultCounter.setPrefix(ChatColor.GRAY + "Assaut: " + ChatColor.RED + "00:00");
 		scorelist.add(obj.getScore(ChatColor.BOLD + ""));
 
-		scorelist.add(obj.getScore(ChatColor.MAGIC + "" + ChatColor.BOLD));
 		//Ressources
+		scorelist.add(obj.getScore(ChatColor.MAGIC + "" + ChatColor.BOLD));
 		scorelist.add(obj.getScore(ChatColor.GREEN + "" + ChatColor.BOLD + "  Ressources"));
 
 		Team stoneAmmount = scoreboard.registerNewTeam("AOE_stone");
@@ -79,7 +79,7 @@ public class GameScoreboard {
 		goldAmmount.setPrefix(ChatColor.GRAY + "" + ChatColor.BOLD + "Or: " + ChatColor.RESET + "" + ChatColor.YELLOW + "0");
 		scorelist.add(obj.getScore(ChatColor.DARK_GRAY + ""));
 		
-		int n = scorelist.size();
+		int n = scorelist.size(); //Set the number of each line of the scoreboard
 		for (Score score : scorelist) {
 			score.setScore(n);
 			n--;
