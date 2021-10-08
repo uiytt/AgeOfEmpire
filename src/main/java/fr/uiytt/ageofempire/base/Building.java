@@ -35,7 +35,6 @@ public class Building {
         return !inConstruction && !constructed;
     }
 
-
     public void summonBuildingVillager(Location villagerLocation) {
         Villager villager = (Villager) villagerLocation.getWorld().spawnEntity(villagerLocation, EntityType.VILLAGER);
         villager.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(buildingType.getHealth());
@@ -68,16 +67,11 @@ public class Building {
 
         villagerLoc.getWorld().spawnEntity(villagerLoc, EntityType.PRIMED_TNT);
     }
-
-    public boolean isInConstruction() {
-        return inConstruction;
-    }
+    
     public void setInConstruction(boolean inConstruction) {
         this.inConstruction = inConstruction;
     }
-    public boolean isConstructed() {
-        return constructed;
-    }
+
     public void setConstructed(boolean constructed) {
         this.constructed = constructed;
     }
