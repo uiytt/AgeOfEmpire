@@ -3,13 +3,10 @@ package fr.uiytt.ageofempire.gui.villagergui;
 import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
-import fr.minuskube.inv.content.InventoryProvider;
 import fr.uiytt.ageofempire.AgeOfEmpire;
 import fr.uiytt.ageofempire.base.BuildingType;
 import fr.uiytt.ageofempire.base.TeamBase;
-import fr.uiytt.ageofempire.game.GameData;
 import fr.uiytt.ageofempire.game.GameManager;
-import fr.uiytt.ageofempire.game.GameScoreboard;
 import fr.uiytt.ageofempire.utils.Utils;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
@@ -17,24 +14,21 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
-import java.util.UUID;
 
-public class ForgeVillagerGui implements InventoryProvider {
+public class ForgeVillagerGui extends VillagerGUI {
 
-    public final SmartInventory inventory = SmartInventory.builder()
-            .id("AOE_Forge")
-            .size(5, 9)
-            .title(BuildingType.FORGE.getDisplayName())
-            .provider(this)
-            .manager(AgeOfEmpire.getInvManager())
-            .build();
-
-    private GameData gameData;
+    public ForgeVillagerGui() {
+        super.inventory = SmartInventory.builder()
+                .id("AOE_Forge")
+                .size(5, 9)
+                .title(BuildingType.FORGE.getDisplayName())
+                .provider(this)
+                .manager(AgeOfEmpire.getInvManager())
+                .build();
+    }
 
     @Override
     public void init(Player player, InventoryContents contents) {
-
-        gameData = GameManager.getGameInstance().getGameData();
         TeamBase teamBase = gameData.getPlayersTeam().get(player.getUniqueId()).getTeamBase();
 
         contents.fillBorders(ClickableItem.empty(Utils.newItemStack(Material.GRAY_STAINED_GLASS_PANE, ChatColor.GRAY + "", List.of("") )));
@@ -67,18 +61,5 @@ public class ForgeVillagerGui implements InventoryProvider {
 
     }
 
-    private void buy(Player player, ItemStack itemStack, int goldPrice) {
-        UUID playerUUID = player.getUniqueId();
-        int gold = gameData.getGold().get(playerUUID);
 
-        if(goldPrice > gold) {
-            player.sendMessage("Vous n'avez pas assez d'or.");
-            return;
-        }
-
-        player.getInventory().addItem(itemStack);
-        gameData.getGold().put(playerUUID, gold - goldPrice);
-        GameScoreboard.getPlayersScoreboard().get(playerUUID).updateGoldAmmount(gold - goldPrice);
-
-    }
 }

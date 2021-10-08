@@ -9,9 +9,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.function.Consumer;
 
 public enum BuildingType {
-    FORUM("Forum", 0, 0, 0, 1, 2000d,0, player -> new ForumVillagerGUI().inventory.open(player)),
-    FORGE("Forge", 1, 250,200,1, 700d, 120, player -> new ForgeVillagerGui().inventory.open(player)),
-    MILL("Moulin", 1, 280, 150, 1, 1000d, 80, player -> new MillVillagerGui().inventory.open(player));
+    FORUM("Forum", 0, 0, 0, 1, 2000d,0, player -> new ForumVillagerGUI().open(player)),
+    FORGE("Forge", 1, 250,200,1, 700d, 120, player -> new ForgeVillagerGui().open(player)),
+    MILL("Moulin", 1, 280, 150, 1, 1000d, 80, player -> new MillVillagerGui().open(player));
 
     private final String displayName;
     private final int age;

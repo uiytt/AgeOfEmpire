@@ -3,7 +3,6 @@ package fr.uiytt.ageofempire.gui.villagergui;
 import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.SmartInventory;
 import fr.minuskube.inv.content.InventoryContents;
-import fr.minuskube.inv.content.InventoryProvider;
 import fr.uiytt.ageofempire.AgeOfEmpire;
 import fr.uiytt.ageofempire.base.Building;
 import fr.uiytt.ageofempire.base.BuildingType;
@@ -19,18 +18,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("unused")
-public class ForumVillagerGUI implements InventoryProvider {
-
-    public final SmartInventory inventory = SmartInventory.builder()
-            .id("AOE_Forum")
-            .size(5, 9)
-            .title("Forum")
-            .provider(this)
-            .manager(AgeOfEmpire.getInvManager())
-            .build();
+public class ForumVillagerGUI extends VillagerGUI {
 
     private TeamBase teamBase;
     private Player player;
+    public ForumVillagerGUI() {
+        super.inventory = SmartInventory.builder()
+                .id("AOE_Forum")
+                .size(5, 9)
+                .title("Forum")
+                .provider(this)
+                .manager(AgeOfEmpire.getInvManager())
+                .build();
+    }
+
 
     @Override
     public void init(Player player, InventoryContents contents) {
@@ -48,6 +49,16 @@ public class ForumVillagerGUI implements InventoryProvider {
     public void update(Player player, InventoryContents contents) {
 
     }
+    private void buyBuilding(BuildingType buildingType) {
+        if(teamBase.getStone() >= buildingType.getStoneCost() && teamBase.getWood() >= buildingType.getWoodCost()) {
+            teamBase.addStone(-buildingType.getStoneCost());
+            teamBase.addWood(-buildingType.getWoodCost());
+            teamBase.updateTeamScoreboard();
+            player.getInventory().addItem(Utils.newItemStack(teamBase.getGameTeam().getColor().getWool(), buildingType.getDisplayName(), List.of("&8" + buildingType.getDisplayName(), "&8AOE")));
+        } else {
+            player.sendMessage(ChatColor.RED + "Vous n'avez pas assez de ressources.");
+        }
+    }
 
     private ClickableItem buildItemStackForBuilds(BuildingType buildingType, Material material, List<String> fixLore) {
         Building building = teamBase.getBuilds().get(buildingType);
@@ -60,18 +71,9 @@ public class ForumVillagerGUI implements InventoryProvider {
         } else if(building != null && !building.isAvailable()) {
             return ClickableItem.empty(Utils.newItemStack(Material.BEDROCK, "&f" + buildingType.getDisplayName() + "&7 - Déjà construit", lore));
         } else {
-            return ClickableItem.of(Utils.newItemStack(material, "&e" + buildingType.getDisplayName(), lore), event -> buy(buildingType));
+            return ClickableItem.of(Utils.newItemStack(material, "&e" + buildingType.getDisplayName(), lore), event -> buyBuilding(buildingType));
         }
     }
 
-    private void buy(BuildingType buildingType) {
-        if(teamBase.getStone() >= buildingType.getStoneCost() && teamBase.getWood() >= buildingType.getWoodCost()) {
-            teamBase.addStone(-buildingType.getStoneCost());
-            teamBase.addWood(-buildingType.getWoodCost());
-            teamBase.updateTeamScoreboard();
-            player.getInventory().addItem(Utils.newItemStack(teamBase.getGameTeam().getColor().getWool(), buildingType.getDisplayName(), List.of("&8" + buildingType.getDisplayName(), "&8AOE")));
-        } else {
-            player.sendMessage(ChatColor.RED + "Vous n'avez pas assez de ressources.");
-        }
-    }
+
 }
