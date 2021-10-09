@@ -120,6 +120,7 @@ public enum StructureMaterial {
     ACTIVATOR_RAIL(true),
     DETECTOR_RAIL(true),
     POWERED_RAIL(true),
+    BELL(true),
 
     ACACIA_FENCE(true),
     ACACIA_FENCE_GATE(true),

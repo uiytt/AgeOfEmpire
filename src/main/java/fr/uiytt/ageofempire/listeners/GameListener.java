@@ -106,14 +106,14 @@ public class GameListener implements Listener {
 
         event.setDropItems(false);
         if(event.getBlock().getType() == Material.ANDESITE) {
-            gameTeam.getTeamBase().addStone(15);
-            gameData.getGold().put(player.getUniqueId(), gameData.getGold().get(player.getUniqueId()) + 5);
-            player.sendMessage("+ 15 Stone, +5 Gold");
+            gameTeam.getTeamBase().addStone(5);
+            gameData.getGold().put(player.getUniqueId(), gameData.getGold().get(player.getUniqueId()) + 10);
+            player.sendMessage("+ 5 Stone, +10 Gold");
             gameTeam.getTeamBase().updateTeamScoreboard();
         } else if(Tag.LOGS.isTagged(event.getBlock().getType())) {
-            gameTeam.getTeamBase().addWood(20);
-            gameData.getGold().put(player.getUniqueId(), gameData.getGold().get(player.getUniqueId()) + 5);
-            player.sendMessage("+ 20 Bois, +5 Gold");
+            gameTeam.getTeamBase().addWood(10);
+            gameData.getGold().put(player.getUniqueId(), gameData.getGold().get(player.getUniqueId()) + 10);
+            player.sendMessage("+ 10 Bois, +10 Gold");
             gameTeam.getTeamBase().updateTeamScoreboard();
         }
 
