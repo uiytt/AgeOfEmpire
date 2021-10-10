@@ -26,11 +26,10 @@ public class VillagerListener implements Listener {
     @EventHandler
     public void onEntityDamage(EntityDamageByEntityEvent event) {
         if(!GameManager.getGameInstance().getGameData().isGameRunning()) return;
-
-        if(event.getEntity().getType() != EntityType.VILLAGER) return;
-        Villager villager = (Villager) event.getEntity();
+        if(!(event.getEntity() instanceof Villager villager)) return;
         if (villager.getCustomName() == null) return;
 
+        //Get the team of the villager from the name
         ColorLink colorLink = ColorLink.getColorFromString(villager.getCustomName().substring(0,2));
         GameTeam villagerGameTeam = null;
         for(GameTeam iteratorTeam : GameManager.getGameInstance().getGameData().getTeams()) {
@@ -46,12 +45,21 @@ public class VillagerListener implements Listener {
             return;
         }
 
+        //Get villager's building from the name
         String type = villager.getCustomName().split(ChatColor.GRAY + " - ")[0].substring(2);
         BuildingType buildingType = BuildingType.getBuildingTypeFromName(type);
         if(buildingType == null) return;
 
-        villager.setCustomName(villagerGameTeam.getColor().getChatColor() + buildingType.getDisplayName() + ChatColor.GRAY + " - " + ChatColor.GREEN + Utils.roundToHalf(villager.getHealth()));
-        villagerGameTeam.getTeamBase().getBuilds().get(buildingType).sendWarning();
+        Building building = villagerGameTeam.getTeamBase().getBuilds().get(buildingType);
+        building.setHealth(building.getHealth() - event.getDamage());
+        event.setDamage(0);
+
+        if(building.getHealth() < 0.5d) {
+            villager.setHealth(0d);
+        } else {
+            villager.setCustomName(villagerGameTeam.getColor().getChatColor() + buildingType.getDisplayName() + ChatColor.GRAY + " - " + ChatColor.GREEN + Utils.roundToHalf(building.getHealth()));
+            villagerGameTeam.getTeamBase().getBuilds().get(buildingType).sendWarning();
+        }
     }
 
     @EventHandler

@@ -20,6 +20,7 @@ public class Building {
     private boolean constructed = false;
     private long lastWarning = System.currentTimeMillis();
     private Location plotLocation = new Location(ConfigManager.getWorld(), 0, 0, 0);
+    private double health;
 
     /**
      * An object storing all the information related to a building constructed in game.
@@ -29,6 +30,7 @@ public class Building {
     public Building(BuildingType buildingType, TeamBase teamBase) {
         this.buildingType = buildingType;
         this.teamBase = teamBase;
+        this.health = buildingType.getHealth();
     }
 
     public boolean isAvailable() {
@@ -37,8 +39,7 @@ public class Building {
 
     public void summonBuildingVillager(Location villagerLocation) {
         Villager villager = (Villager) villagerLocation.getWorld().spawnEntity(villagerLocation, EntityType.VILLAGER);
-        villager.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(buildingType.getHealth());
-        villager.setHealth(buildingType.getHealth());
+        villager.setHealth(20);
         villager.setCustomName(teamBase.getGameTeam().getColor().getChatColor() + buildingType.getDisplayName() + ChatColor.GRAY + " - " + ChatColor.GREEN + villager.getHealth());
         villager.setAI(false);
         villager.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(100);
@@ -71,16 +72,15 @@ public class Building {
     public void setInConstruction(boolean inConstruction) {
         this.inConstruction = inConstruction;
     }
-
     public void setConstructed(boolean constructed) {
         this.constructed = constructed;
     }
-
     public Location getPlotLocation() {
         return plotLocation;
     }
-
     public void setPlotLocation(Location plotLocation) {
         this.plotLocation = plotLocation;
     }
+    public double getHealth() {return health;}
+    public void setHealth(double health) {this.health = health;}
 }
