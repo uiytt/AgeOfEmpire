@@ -8,6 +8,7 @@ package fr.uiytt.ageofempire.structures;
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.MaxChangedBlocksException;
 import com.sk89q.worldedit.WorldEdit;
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.bukkit.BukkitWorld;
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormat;
@@ -72,7 +73,6 @@ public class Structure {
         File schematicFile = new File(structureInfoFile.getParent() + File.separator + "schematics" + File.separator + structureYaml.get("schem-path"));
 
         villagerRelativeCoordinates = ConfigParser.stringToLocation(structureYaml.getOrDefault("villager.coordinates","0 0 0"));
-        HashMap<BlockVector3, BaseBlock> delayedBlocks = new HashMap<>();
 
         ClipboardFormat format = ClipboardFormats.findByFile(schematicFile);
         Clipboard clipboard;
@@ -93,21 +93,10 @@ public class Structure {
                     BaseBlock block = clipboard.getFullBlock(vector);
                     if(block.getBlockType().getMaterial().isAir()) continue;
 
-                    StructureMaterial structureMaterial;
-                    try {
-                        structureMaterial = StructureMaterial.valueOf(block.getBlockType().getMaterial().toString());
-                    }  catch (IllegalArgumentException illegalArgumentException) {
-                        structureMaterial = null;
-                    }
-                    if (structureMaterial == null || !structureMaterial.isDelayed()) { //Check if the block should be placed at the end.
-                        blocks.put(BlockVector3.at(x, y, z), block);
-                    } else {
-                        delayedBlocks.put(BlockVector3.at(x, y, z), block);
-                    }
+                    blocks.put(BlockVector3.at(x, y, z), block);
                 }
             }
         }
-        blocks.putAll(delayedBlocks); //Since blocks is a List with order, at the delayed blocks at the end of the list.
         return this;
     }
 
