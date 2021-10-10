@@ -42,6 +42,7 @@ public class VillagerListener implements Listener {
 
         //Check if player attacking is on the same team of the villager
         if(GameManager.getGameInstance().getGameData().getPlayersTeam().get(event.getDamager().getUniqueId()).getName().equals(villagerGameTeam.getName())) {
+            event.setCancelled(true);
             return;
         }
 

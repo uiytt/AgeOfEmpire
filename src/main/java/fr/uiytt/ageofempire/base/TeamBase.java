@@ -50,10 +50,11 @@ public class TeamBase {
             new Plot(this, plot);
         }
 
+        Building building = builds.get(BuildingType.FORUM);
+
         Villager villager = (Villager) ConfigManager.getWorld().spawnEntity(ConfigParser.stringToLocation(yamlBase.getOrDefault("villager","13 70 0")), EntityType.VILLAGER);
-        villager.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(BuildingType.FORUM.getHealth());
-        villager.setHealth(BuildingType.FORUM.getHealth());
-        villager.setCustomName(getGameTeam().getColor().getChatColor() + BuildingType.FORUM.getDisplayName() + ChatColor.GRAY + " - " + ChatColor.GREEN + villager.getHealth());
+        villager.setHealth(20);
+        villager.setCustomName(getGameTeam().getColor().getChatColor() + BuildingType.FORUM.getDisplayName() + ChatColor.GRAY + " - " + ChatColor.GREEN + building.getHealth());
         villager.setAI(false);
         villager.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(100);
     }
