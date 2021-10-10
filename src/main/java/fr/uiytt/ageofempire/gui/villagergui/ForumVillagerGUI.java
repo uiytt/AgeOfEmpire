@@ -44,6 +44,7 @@ public class ForumVillagerGUI extends VillagerGUI {
 
         contents.set(1, 3, buildItemStackForBuilds(BuildingType.FORGE, Material.ANVIL, List.of("&7Vous permet d'acheter des", "&7armes et des outils.")));
         contents.set(1, 4, buildItemStackForBuilds(BuildingType.MILL, Material.BREAD, List.of("&7Vous permet d'acheter de", "&7la nourriture.")));
+        contents.set(1, 5, buildItemStackForBuilds(BuildingType.ARMORY, Material.IRON_CHESTPLATE, List.of("&7Vous permet d'achter des", "&7armures.")));
     }
 
     @Override

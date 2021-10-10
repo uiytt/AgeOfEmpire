@@ -1,5 +1,6 @@
 package fr.uiytt.ageofempire.base;
 
+import fr.uiytt.ageofempire.gui.villagergui.ArmoryVillagerGUI;
 import fr.uiytt.ageofempire.gui.villagergui.ForgeVillagerGui;
 import fr.uiytt.ageofempire.gui.villagergui.ForumVillagerGUI;
 import fr.uiytt.ageofempire.gui.villagergui.MillVillagerGui;
@@ -11,7 +12,8 @@ import java.util.function.Consumer;
 public enum BuildingType {
     FORUM("Forum", 0, 0, 0, 1, 3000d,0, player -> new ForumVillagerGUI().open(player)),
     FORGE("Forge", 1, 250,200,1, 1500d, 120, player -> new ForgeVillagerGui().open(player)),
-    MILL("Moulin", 1, 280, 150, 1, 1300d, 90, player -> new MillVillagerGui().open(player));
+    MILL("Moulin", 1, 110, 150, 1, 1300d, 90, player -> new MillVillagerGui().open(player)),
+    ARMORY("Armurie", 1, 200, 175, 1, 1000d, 120, player -> new ArmoryVillagerGUI().open(player));
 
     private final String displayName;
     private final int age;
