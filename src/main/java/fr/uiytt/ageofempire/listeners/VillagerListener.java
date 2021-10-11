@@ -28,6 +28,11 @@ public class VillagerListener implements Listener {
         if(!GameManager.getGameInstance().getGameData().isGameRunning()) return;
         if(!(event.getEntity() instanceof Villager villager)) return;
         if (villager.getCustomName() == null) return;
+        //Prevent mobs from damaging the villagers
+        if(!(event.getDamager() instanceof Player)) {
+            event.setCancelled(true);
+            return;
+        }
 
         //Get the team of the villager from the name
         ColorLink colorLink = ColorLink.getColorFromString(villager.getCustomName().substring(0,2));

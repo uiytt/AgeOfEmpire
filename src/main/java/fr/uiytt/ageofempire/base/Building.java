@@ -40,7 +40,7 @@ public class Building {
     public void summonBuildingVillager(Location villagerLocation) {
         Villager villager = (Villager) villagerLocation.getWorld().spawnEntity(villagerLocation, EntityType.VILLAGER);
         villager.setHealth(20);
-        villager.setCustomName(teamBase.getGameTeam().getColor().getChatColor() + buildingType.getDisplayName() + ChatColor.GRAY + " - " + ChatColor.GREEN + villager.getHealth());
+        villager.setCustomName(teamBase.getGameTeam().getColor().getChatColor() + buildingType.getDisplayName() + ChatColor.GRAY + " - " + ChatColor.GREEN + this.health);
         villager.setAI(false);
         villager.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(100);
 
