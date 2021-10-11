@@ -54,8 +54,8 @@ public class Plot {
         building.setInConstruction(true);
         building.setPlotLocation(location);
         constructed = true;
-        File structureFile = new File("plugins" + File.separator + "AgeOfEmpire" + File.separator + playerTeam.getColor().name() + File.separator +  buildingType.name() + "-" + side + ".yml");
-        Structure structure = new Structure(AgeOfEmpire.getInstance(), structureFile, building);
+        File structureFile = new File("plugins" + File.separator + "AgeOfEmpire" + File.separator + playerTeam.getColor().name() + File.separator +  buildingType.name() + ".yml");
+        Structure structure = new Structure(AgeOfEmpire.getInstance(), structureFile, building, side);
         try {
             structure.loadStructure().pastStructure(location, buildingType.getTime());
         } catch (StructureNotLoadedException e) {

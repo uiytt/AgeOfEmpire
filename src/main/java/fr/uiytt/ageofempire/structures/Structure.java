@@ -45,6 +45,7 @@ public class Structure {
     private int width = 0;
     private int height = 0;
     private int length = 0;
+    private final String side;
     private Location villagerRelativeCoordinates;
 
     private final LinkedHashMap<BlockVector3, BaseBlock> blocks = new LinkedHashMap<>();
@@ -55,11 +56,13 @@ public class Structure {
      * @param plugin JavaPlugin instance
      * @param structureInfo Yaml File with information such as schematic location, and villager coordinates
      * @param building {@link Building} of a Team, mainly to prevent multiple instancies of this building in the same team.
+     * @param side of the plot, either RIGHT or LEFT
      */
-    public Structure(AgeOfEmpire plugin, File structureInfo, Building building) {
+    public Structure(AgeOfEmpire plugin, File structureInfo, Building building, String side) {
         this.plugin = plugin;
         this.structureInfoFile = structureInfo;
         this.building = building;
+        this.side = side;
     }
 
     /**
@@ -70,9 +73,8 @@ public class Structure {
      */
     public Structure loadStructure() throws StructureNotLoadedException {
         Yaml structureYaml = new Yaml(structureInfoFile);
-        File schematicFile = new File(structureInfoFile.getParent() + File.separator + "schematics" + File.separator + structureYaml.get("schem-path"));
-
-        villagerRelativeCoordinates = ConfigParser.stringToLocation(structureYaml.getOrDefault("villager.coordinates","0 0 0"));
+        File schematicFile = new File(structureInfoFile.getParent() + File.separator + "schematics" + File.separator + structureYaml.get("schem-" + side));
+        villagerRelativeCoordinates = ConfigParser.stringToLocation(structureYaml.getOrDefault("villager." + side,"0 0 0"));
 
         ClipboardFormat format = ClipboardFormats.findByFile(schematicFile);
         Clipboard clipboard;
