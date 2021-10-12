@@ -11,8 +11,10 @@ import fr.uiytt.ageofempire.game.GameManager;
 import fr.uiytt.ageofempire.game.GameTeam;
 import fr.uiytt.ageofempire.utils.Utils;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +47,33 @@ public class ForumVillagerGUI extends VillagerGUI {
         contents.set(1, 3, buildItemStackForBuilds(BuildingType.FORGE, Material.ANVIL, List.of("&7Vous permet d'acheter des", "&7armes et des outils.")));
         contents.set(1, 4, buildItemStackForBuilds(BuildingType.MILL, Material.BREAD, List.of("&7Vous permet d'acheter de", "&7la nourriture.")));
         contents.set(1, 5, buildItemStackForBuilds(BuildingType.ARMORY, Material.IRON_CHESTPLATE, List.of("&7Vous permet d'achter des", "&7armures.")));
+
+        ClickableItem ageItem;
+        switch (teamBase.getAge()) {
+            case 2 -> {
+                ageItem = ClickableItem.of(Utils.newItemStack(Material.GOLD_INGOT, "&ePasser à l'âge 3", List.of(
+                                "&7&lÂGE 3 :",
+                                "&a400 de pierres",
+                                "&a450 de bois"))
+                        , event -> upgradeAge(3, 400,450));
+            }
+            case 3 -> {
+                ageItem = ClickableItem.of(Utils.newItemStack(Material.DIAMOND, "&ePasser à l'âge 4", List.of(
+                                "&7&lÂGE 4 :",
+                                "&a1300 de pierres",
+                                "&a1000 de bois"))
+                        , event -> upgradeAge(4,1300,1000));
+            }
+            case 4 -> {
+                ageItem = ClickableItem.empty(Utils.newItemStack(Material.IRON_INGOT, "&eVous êtes Âge 4", null));
+            }
+            default -> ageItem = ClickableItem.of(Utils.newItemStack(Material.IRON_INGOT, "&ePasser à l'âge 2", List.of(
+                    "&7&lÂGE 2 :",
+                    "&a200 de pierres",
+                    "&a250 de bois"))
+                    , event -> upgradeAge(2, 200,250));
+        }
+        contents.set(4,4, ageItem);
     }
 
     @Override
@@ -60,6 +89,27 @@ public class ForumVillagerGUI extends VillagerGUI {
         } else {
             player.sendMessage(ChatColor.RED + "Vous n'avez pas assez de ressources.");
         }
+    }
+
+    private void upgradeAge(int age, int costStone, int costWood) {
+        if(teamBase.getAge() + 1 != age) {
+            player.closeInventory();
+            player.sendMessage("Vous êtes déjà à cette âge.");
+            return;
+        }
+        if(teamBase.getStone() < costStone || teamBase.getWood() < costWood) {
+            player.sendMessage(ChatColor.RED + "Vous n'avez pas assez de ressources.");
+            return;
+        }
+        teamBase.setAge(teamBase.getAge() + 1);
+        teamBase.addStone(-costStone);
+        teamBase.addWood(-costWood);
+        teamBase.getGameTeam().getPlayersUUIDs().forEach(playerUUID -> {
+            Player player = Bukkit.getPlayer(playerUUID);
+            if(player == null) return;
+            player.closeInventory();
+        });
+        Bukkit.broadcastMessage(teamBase.getGameTeam().getColor().getChatColor() + "L'équipe " + teamBase.getGameTeam().getName() + " est passée âge " + teamBase.getAge());
     }
 
     private ClickableItem buildItemStackForBuilds(BuildingType buildingType, Material material, List<String> fixLore) {

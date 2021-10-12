@@ -106,9 +106,9 @@ public class GameListener implements Listener {
 
         event.setDropItems(false);
         if(event.getBlock().getType() == Material.ANDESITE) {
-            gameTeam.getTeamBase().addStone(5);
+            gameTeam.getTeamBase().addStone(8);
             gameData.getGold().put(player.getUniqueId(), gameData.getGold().get(player.getUniqueId()) + 10);
-            player.sendMessage("+ 5 Stone, +10 Gold");
+            player.sendMessage("+ 8 Stone, +10 Gold");
             gameTeam.getTeamBase().updateTeamScoreboard();
         } else if(Tag.LOGS.isTagged(event.getBlock().getType())) {
             gameTeam.getTeamBase().addWood(10);
