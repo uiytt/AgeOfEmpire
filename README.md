@@ -27,7 +27,7 @@ Once done the plugin will be availabe on [SpigotMC](spigotmc.org/)
 |------|---------|--------|
 |![Armory](https://i.postimg.cc/pTYLk91w/2021-10-09-14-26-12.png)|![Archery](https://i.postimg.cc/TP0s9fJk/2021-10-09-14-26-39.png)|![Kennel](https://i.postimg.cc/hjfqQXR8/2021-10-09-14-26-26.png)|
 
-## :heart: Need Help, Want to contributes ? 
+## :heart: Need Help, Want to contribute ? 
 While using Github to ask questions or report a bug is better, sometimes you might want to have a discussion with someone about the project or how it works. If so, don't hesitate to contact me on discord : uiytt#7002
 
 Also don't hesitate to contributes ! I'm in no way a professional developer and if you know how to improve performances/code just tell me ^^ ! I will be glad to learn.
