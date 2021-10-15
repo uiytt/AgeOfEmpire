@@ -75,6 +75,7 @@ public class Building {
     public void setConstructed(boolean constructed) {
         this.constructed = constructed;
     }
+    public boolean isConstructed() {return constructed;}
     public Location getPlotLocation() {
         return plotLocation;
     }

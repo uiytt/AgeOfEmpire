@@ -6,7 +6,6 @@ import fr.minuskube.inv.content.InventoryContents;
 import fr.uiytt.ageofempire.AgeOfEmpire;
 import fr.uiytt.ageofempire.base.BuildingType;
 import fr.uiytt.ageofempire.base.TeamBase;
-import fr.uiytt.ageofempire.game.GameManager;
 import fr.uiytt.ageofempire.utils.Utils;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;

@@ -1,8 +1,12 @@
 package fr.uiytt.ageofempire.game;
 
 import fr.uiytt.ageofempire.ConfigManager;
+import fr.uiytt.ageofempire.base.Building;
+import fr.uiytt.ageofempire.base.BuildingType;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.HashMap;
 
 public class ThreadEverySecond {
 
@@ -20,6 +24,7 @@ public class ThreadEverySecond {
 		private final int pvpTimer;
 		private final int assaultTimer;
 		private int secondFromStart = 0;
+		private int timeMinutes = 0;
 		private final GameManager game;
 
 		private SecondRunnable(GameManager game) {
@@ -58,6 +63,18 @@ public class ThreadEverySecond {
 				}
 			}
 
+			timeMinutes += 1;
+
+			if(timeMinutes != 60) return;
+			timeMinutes = 0;
+
+			for(GameTeam team : gamedata.getTeams()) {
+				HashMap<BuildingType, Building> buildings = team.getTeamBase().getBuilds();
+				if(buildings.get(BuildingType.MINE).isConstructed()) {
+					team.getTeamBase().addStone(20);
+					team.getTeamBase().updateTeamScoreboard();
+				}
+			}
 		}
 
 	}

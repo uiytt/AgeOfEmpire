@@ -8,7 +8,6 @@ package fr.uiytt.ageofempire.structures;
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.MaxChangedBlocksException;
 import com.sk89q.worldedit.WorldEdit;
-import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.bukkit.BukkitWorld;
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormat;
@@ -31,9 +30,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 
 public class Structure {
@@ -45,10 +44,12 @@ public class Structure {
     private int width = 0;
     private int height = 0;
     private int length = 0;
+    private int nbrBlocks = 0;
     private final String side;
     private Location villagerRelativeCoordinates;
 
     private final LinkedHashMap<BlockVector3, BaseBlock> blocks = new LinkedHashMap<>();
+    private final LinkedHashMap<BlockVector3, BaseBlock> undergroundBlocks = new LinkedHashMap<>();
 
     /**
      * Create a Structure object handling loading and pasting of a schematic
@@ -87,6 +88,15 @@ public class Structure {
         } catch (Exception e) {
             throw new StructureNotLoadedException("File " + schematicFile.getAbsolutePath() + " was not found.");
         }
+        for(int y = clipboard.getMinimumPoint().subtract(clipboard.getOrigin()).getY();y<0;y++) { //Construct automatically all blocks under y = 0
+            for (int x = 0; x < width; x++) {
+                for (int z = 0; z < length; z++) {
+                    BlockVector3 vector = BlockVector3.at(x, y, z).add(clipboard.getOrigin());
+                    BaseBlock block = clipboard.getFullBlock(vector);
+                    undergroundBlocks.put(BlockVector3.at(x, y, z), block);
+                }
+            }
+        }
 
         for (int y = 0; y < height; y++) { //For y first to have the structure built by layer.
             for (int x = 0; x < width; x++) {
@@ -115,6 +125,14 @@ public class Structure {
                 || length == 0
                 || blocks.isEmpty()
         ) throw new StructureNotLoadedException("Data has not been loaded yet");
+
+        try(EditSession editSession = WorldEdit.getInstance().newEditSession(new BukkitWorld(ConfigManager.getWorld()))) {
+            for(Map.Entry<BlockVector3, BaseBlock> entry : undergroundBlocks.entrySet()) {
+                editSession.setBlock(entry.getKey().add(location.getBlockX(), location.getBlockY(), location.getBlockZ()), entry.getValue());
+            }
+        } catch (MaxChangedBlocksException e) {
+            e.printStackTrace();
+        }
 
         int blockPerSecond = (int) Math.ceil((double) blocks.size() / time);
 
