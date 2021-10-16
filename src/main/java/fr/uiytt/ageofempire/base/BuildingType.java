@@ -14,7 +14,8 @@ public enum BuildingType {
     FORGE("Forge", 1, 250,200,1, 1500d, 120, player -> new ForgeVillagerGui().open(player)),
     MILL("Moulin", 1, 110, 150, 1, 1300d, 90, player -> new MillVillagerGui().open(player)),
     ARMORY("Armurie", 1, 200, 175, 1, 1000d, 120, player -> new ArmoryVillagerGUI().open(player)),
-    MINE("Mine", 2, 300, 120, 1, 800d, 200, player -> {});
+    MINE("Mine", 2, 300, 120, 1, 800d, 200, player -> {}),
+    SAWMILL("Scierie", 2, 100, 250, 1, 800d, 200, player -> {});
 
     private final String displayName;
     private final int age;

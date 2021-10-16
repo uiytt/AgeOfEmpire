@@ -74,6 +74,10 @@ public class ThreadEverySecond {
 					team.getTeamBase().addStone(20);
 					team.getTeamBase().updateTeamScoreboard();
 				}
+				if(buildings.get(BuildingType.SAWMILL).isConstructed()) {
+					team.getTeamBase().addWood(20);
+					team.getTeamBase().updateTeamScoreboard();
+				}
 			}
 		}
 
