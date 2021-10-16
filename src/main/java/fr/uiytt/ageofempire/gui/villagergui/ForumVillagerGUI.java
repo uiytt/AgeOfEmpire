@@ -108,6 +108,7 @@ public class ForumVillagerGUI extends VillagerGUI {
         teamBase.setAge(teamBase.getAge() + 1);
         teamBase.addStone(-costStone);
         teamBase.addWood(-costWood);
+        teamBase.updateTeamScoreboard();
         teamBase.getGameTeam().getPlayersUUIDs().forEach(playerUUID -> {
             Player player = Bukkit.getPlayer(playerUUID);
             if(player == null) return;
