@@ -109,11 +109,13 @@ public class GameListener implements Listener {
             gameTeam.getTeamBase().addStone(8);
             gameData.getGold().put(player.getUniqueId(), gameData.getGold().get(player.getUniqueId()) + 10);
             player.sendMessage("+ 8 Stone, +10 Gold");
+            player.giveExp(1);
             gameTeam.getTeamBase().updateTeamScoreboard();
         } else if(Tag.LOGS.isTagged(event.getBlock().getType())) {
             gameTeam.getTeamBase().addWood(10);
             gameData.getGold().put(player.getUniqueId(), gameData.getGold().get(player.getUniqueId()) + 10);
             player.sendMessage("+ 10 Bois, +10 Gold");
+            player.giveExp(1);
             gameTeam.getTeamBase().updateTeamScoreboard();
         }
 
