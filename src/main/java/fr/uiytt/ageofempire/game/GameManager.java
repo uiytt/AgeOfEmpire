@@ -9,6 +9,7 @@ import org.bukkit.GameRule;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Villager;
 import org.bukkit.potion.PotionEffect;
@@ -43,6 +44,7 @@ public class GameManager {
 	 */
 	public void init(List<Player> players) {
 		List<UUID> playersUUID = new ArrayList<>();
+		removePlayersFromConfig();
 		for(Player player : players) {
 			UUID playerUUID = player.getUniqueId();
 			playersUUID.add(playerUUID);
@@ -83,13 +85,12 @@ public class GameManager {
 		}
 	}
 
-	/* //Need to be reimplemented
 	private void removePlayersFromConfig() {
 		Bukkit.getOnlinePlayers().forEach(HumanEntity::closeInventory);
-		StartItemsMenu.getPlayersModifyingItems().clear();
-		StartItemsMenu.getPlayersGamemode().clear();
-		StartItemsMenu.getPlayersInventory().clear();
-	}**/
+		//StartItemsMenu.getPlayersModifyingItems().clear();
+		//StartItemsMenu.getPlayersGamemode().clear();
+		//StartItemsMenu.getPlayersInventory().clear();
+	}
 
 	/**
 	 * Define world border and time

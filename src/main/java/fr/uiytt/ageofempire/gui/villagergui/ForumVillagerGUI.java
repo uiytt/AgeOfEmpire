@@ -51,6 +51,7 @@ public class ForumVillagerGUI extends VillagerGUI {
             contents.set(2, 2, buildItemStackForBuilds(BuildingType.MINE, Material.ANDESITE, List.of("&7Vous donne 20 de stone", "&7toutes les minutes.")));
             contents.set(2, 3, buildItemStackForBuilds(BuildingType.SAWMILL, Material.OAK_LOG, List.of("&7Vous donne 20 de bois", "&7toutes les minutes.")));
             contents.set(2, 4, buildItemStackForBuilds(BuildingType.LIBRARY, Material.BOOKSHELF, List.of("&7Vous permet de vous enchanter")));
+            contents.set(2, 5, buildItemStackForBuilds(BuildingType.ARCHERY, Material.BOW, List.of("&7Vous permet d'acheter arcs et boucliers.")));
         }
 
         ClickableItem ageItem;

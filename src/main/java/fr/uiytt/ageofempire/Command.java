@@ -2,6 +2,7 @@ package fr.uiytt.ageofempire;
 
 import fr.uiytt.ageofempire.game.GameManager;
 import fr.uiytt.ageofempire.game.GameTeam;
+import fr.uiytt.ageofempire.gui.villagergui.TeamGui;
 import fr.uiytt.ageofempire.utils.PlayerFromUUIDNotFoundException;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
@@ -39,18 +40,10 @@ public class Command implements CommandExecutor, TabCompleter {
                 Bukkit.broadcastMessage("ça stop");
             }
             case "team" -> {
-                if (args.length < 2 || !(sender instanceof Player)) {
+                if (!(sender instanceof Player player) || GameManager.getGameInstance().getGameData().isGameRunning()) {
                     return false;
                 }
-                try {
-                    Player player = (Player) sender;
-                    GameTeam team = GameManager.getGameInstance().getGameData().getTeams().get(Integer.parseInt(args[1]) - 1);
-                    team.addPlayer(player.getUniqueId());
-                    player.sendMessage("tu as rejoins la team " + team.getColor().getChatColor() + team.getName());
-                } catch (PlayerFromUUIDNotFoundException e) {
-                    e.printStackTrace();
-                    return false;
-                }
+                new TeamGui().openGUI(player);
             }
             case "test" -> {
                 if (!(sender instanceof Player player)) {

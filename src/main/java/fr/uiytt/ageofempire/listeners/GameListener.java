@@ -21,6 +21,7 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.List;
@@ -36,6 +37,15 @@ public class GameListener implements Listener {
             return;
         }
         GameTeam.reorganizeTeam();
+    }
+
+    @EventHandler
+    public void onPlayerLeave(PlayerQuitEvent event) {
+        if(GameManager.getGameInstance().getGameData().isGameRunning()) {
+            return;
+        }
+        GameTeam team = GameManager.getGameInstance().getGameData().getPlayersTeam().get(event.getPlayer().getUniqueId());
+        team.removePlayer(event.getPlayer().getUniqueId());
     }
 
     @EventHandler
