@@ -1,10 +1,8 @@
 package fr.uiytt.ageofempire;
 
-import fr.uiytt.ageofempire.base.BuildingType;
 import fr.uiytt.ageofempire.game.GameManager;
 import fr.uiytt.ageofempire.game.GameTeam;
 import fr.uiytt.ageofempire.utils.PlayerFromUUIDNotFoundException;
-import fr.uiytt.ageofempire.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -60,7 +58,8 @@ public class Command implements CommandExecutor, TabCompleter {
                 }
                 if (!GameManager.getGameInstance().getGameData().isGameRunning()) return false;
                 GameTeam playerTeam = GameManager.getGameInstance().getGameData().getPlayersTeam().get(player.getUniqueId());
-                player.getInventory().addItem(Utils.newItemStack(playerTeam.getColor().getWool(), BuildingType.FORGE.getDisplayName(), List.of("&8" + BuildingType.FORGE.getDisplayName(), "&8AOE")));
+                playerTeam.getTeamBase().setAge(playerTeam.getTeamBase().getAge() + 1);
+                //player.getInventory().addItem(Utils.newItemStack(playerTeam.getColor().getWool(), BuildingType.FORGE.getDisplayName(), List.of("&8" + BuildingType.FORGE.getDisplayName(), "&8AOE")));
             }
         }
         return true;

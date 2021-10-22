@@ -3,6 +3,7 @@ package fr.uiytt.ageofempire.base;
 import fr.uiytt.ageofempire.gui.villagergui.ArmoryVillagerGUI;
 import fr.uiytt.ageofempire.gui.villagergui.ForgeVillagerGui;
 import fr.uiytt.ageofempire.gui.villagergui.ForumVillagerGUI;
+import fr.uiytt.ageofempire.gui.villagergui.LibraryVillagerGUI;
 import fr.uiytt.ageofempire.gui.villagergui.MillVillagerGui;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
@@ -15,7 +16,8 @@ public enum BuildingType {
     MILL("Moulin", 1, 110, 150, 1, 1300d, 90, player -> new MillVillagerGui().open(player)),
     ARMORY("Armurie", 1, 200, 175, 1, 1000d, 120, player -> new ArmoryVillagerGUI().open(player)),
     MINE("Mine", 2, 300, 120, 1, 800d, 200, player -> {}),
-    SAWMILL("Scierie", 2, 100, 250, 1, 800d, 200, player -> {});
+    SAWMILL("Scierie", 2, 100, 250, 1, 800d, 200, player -> {}),
+    LIBRARY("Bibliothèque", 2, 320, 250, 2, 1100d, 180, player -> new LibraryVillagerGUI().open(player));
 
     private final String displayName;
     private final int age;
