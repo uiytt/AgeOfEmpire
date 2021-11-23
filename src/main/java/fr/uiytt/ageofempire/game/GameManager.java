@@ -85,6 +85,9 @@ public class GameManager {
 		}
 	}
 
+	/**
+	 * Remove all opened inventory when the game start and delete variables linked to the config GUI
+	 */
 	private void removePlayersFromConfig() {
 		Bukkit.getOnlinePlayers().forEach(HumanEntity::closeInventory);
 		//StartItemsMenu.getPlayersModifyingItems().clear();
@@ -108,7 +111,7 @@ public class GameManager {
 	/**
 	 * Find spawn coordinates of the players, reset the player's data
 	 * and spawn the player.
-	 * @param players
+	 * @param players list of players to teleport
 	 */
 	private void startPlayerTP(List<Player> players) {
 		players.forEach(player -> {
