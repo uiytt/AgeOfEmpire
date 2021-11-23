@@ -49,7 +49,7 @@ public class GameTeam {
 	}
 	
 	/**
-	 * This adds a player to the team
+	 * Add a player to the team
 	 * @param playerUUID if of the player, produce an error if the player is not online
 	 */
 	public void addPlayer(UUID playerUUID) throws PlayerFromUUIDNotFoundException {

@@ -197,7 +197,7 @@ public class GameManager {
 			for (UUID playerUUID : team.getPlayersUUIDs()) {
 				Player player = Bukkit.getPlayer(playerUUID);
 
-				if(player != null && player.getGameMode() != GameMode.SPECTATOR) {
+				if(player != null && player.getGameMode() != GameMode.SPECTATOR && player.isOnline()) {
 					playerAlive = true;
 					break;
 				}

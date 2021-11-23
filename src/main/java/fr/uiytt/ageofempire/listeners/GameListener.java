@@ -32,8 +32,13 @@ public class GameListener implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
+        GameTeam team = GameManager.getGameInstance().getGameData().getPlayersTeam().get(event.getPlayer().getUniqueId());
         if(GameManager.getGameInstance().getGameData().isGameRunning()) {
-            event.getPlayer().setGameMode(GameMode.SPECTATOR);
+            if(team != null) {
+                event.getPlayer().setPlayerListName(team.getColor().getTabColor() + event.getPlayer().getDisplayName());
+            } else {
+                event.getPlayer().setGameMode(GameMode.SPECTATOR);
+            }
             return;
         }
         GameTeam.reorganizeTeam();
@@ -45,7 +50,9 @@ public class GameListener implements Listener {
             return;
         }
         GameTeam team = GameManager.getGameInstance().getGameData().getPlayersTeam().get(event.getPlayer().getUniqueId());
-        team.removePlayer(event.getPlayer().getUniqueId());
+        if(team != null) {
+            team.removePlayer(event.getPlayer().getUniqueId());
+        }
     }
 
     @EventHandler
