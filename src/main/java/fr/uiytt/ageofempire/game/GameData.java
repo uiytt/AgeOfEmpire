@@ -19,11 +19,13 @@ public final class GameData {
 	 * Add a certain ammount of gold to a player safely
 	 * @param playerUUID the player's {@link UUID}
 	 * @param ammount the ammount of gold to add.
+	 * @return the new gold ammount
 	 */
-	public void addGold(UUID playerUUID, int ammount) {
+	public int addGold(UUID playerUUID, int ammount) {
 		int gold = getGold().get(playerUUID);
 		if(gold != 0) ammount += gold;
 		getGold().put(playerUUID, ammount);
+		return ammount;
 	}
 
 	public boolean isGameRunning() { return gameRunning;}

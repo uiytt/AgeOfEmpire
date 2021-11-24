@@ -2,8 +2,7 @@ package fr.uiytt.ageofempire;
 
 import fr.uiytt.ageofempire.game.GameManager;
 import fr.uiytt.ageofempire.game.GameTeam;
-import fr.uiytt.ageofempire.gui.villagergui.TeamGui;
-import fr.uiytt.ageofempire.utils.PlayerFromUUIDNotFoundException;
+import fr.uiytt.ageofempire.gui.TeamGui;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;

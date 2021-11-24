@@ -1,4 +1,4 @@
-package fr.uiytt.ageofempire.gui.villagergui;
+package fr.uiytt.ageofempire.gui;
 
 import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.SmartInventory;
