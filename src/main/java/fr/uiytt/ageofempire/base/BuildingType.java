@@ -19,7 +19,8 @@ public enum BuildingType {
     MINE("Mine", 2, 300, 120, 1, 800d, 200, player -> {}),
     SAWMILL("Scierie", 2, 100, 250, 1, 800d, 200, player -> {}),
     LIBRARY("Bibliothèque", 2, 320, 250, 2, 1100d, 180, player -> new LibraryVillagerGUI().open(player)),
-    ARCHERY("Archerie", 2, 200, 300, 2, 700d, 150, player -> new ArcheryVillagerGUI().open(player));
+    ARCHERY("Archerie", 2, 200, 300, 2, 700d, 150, player -> new ArcheryVillagerGUI().open(player)),
+    BANK("Banque", 3, 400, 220, 2, 800d, 200, player -> {});
 
     private final String displayName;
     private final int age;

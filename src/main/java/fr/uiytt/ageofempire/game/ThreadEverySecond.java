@@ -78,6 +78,10 @@ public class ThreadEverySecond {
 					team.getTeamBase().addWood(20);
 					team.getTeamBase().updateTeamScoreboard();
 				}
+				if(buildings.get(BuildingType.BANK).isConstructed()) {
+					team.getPlayersUUIDs().forEach(playerUUID -> {GameManager.getGameInstance().getGameData().addGold(playerUUID, 20);});
+					team.getTeamBase().updateTeamScoreboard();
+				}
 			}
 		}
 
