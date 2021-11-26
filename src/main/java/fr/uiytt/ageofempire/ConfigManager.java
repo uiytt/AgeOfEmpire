@@ -27,6 +27,11 @@ public class ConfigManager {
         breakableBlocks.add(Material.CAKE);
         deletedDrops.addAll(Tag.WOOL.getValues());
         deletedDrops.addAll(Tag.ITEMS_STONE_TOOL_MATERIALS.getValues());
+        deletedDrops.add(Material.LEATHER_HELMET);
+        deletedDrops.add(Material.LEATHER_CHESTPLATE);
+        deletedDrops.add(Material.LEATHER_LEGGINGS);
+        deletedDrops.add(Material.LEATHER_BOOTS);
+
     }
 
     public static World getWorld() {
