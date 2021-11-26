@@ -9,6 +9,7 @@ public final class GameData {
 
 	private boolean gameRunning = false;
 	private boolean pvp = false;
+	private boolean assaults = false;
 
 	private List<UUID> alivePlayers = new ArrayList<>();
 	private final List<GameTeam> teams = new ArrayList<>();
@@ -38,6 +39,14 @@ public final class GameData {
 		return teams;
 	}
 	public HashMap<UUID,Integer> getGold() {return gold;}
+
+	public boolean isAssaults() {
+		return assaults;
+	}
+
+	public void setAssaults(boolean assaults) {
+		this.assaults = assaults;
+	}
 
 	/**
 	 * @return HashMap of team of each player

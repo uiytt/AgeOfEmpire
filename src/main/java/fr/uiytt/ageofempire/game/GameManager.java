@@ -186,6 +186,34 @@ public class GameManager {
 		}.runTaskAsynchronously(AgeOfEmpire.getInstance());
 	}
 
+	public void enableAssaults() {
+		new BukkitRunnable() {
+
+			@Override
+			public void run() {
+				//5 seconds timer
+				for(int i=5;i>0;i--) {
+					Bukkit.getServer().broadcastMessage("assauts dans %s secondes".replace("%s",String.valueOf(i)));
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+
+				new BukkitRunnable() {
+
+					@Override
+					public void run() {
+						gameData.setAssaults(true);
+						GameScoreboard.updateAssaultTimer(-1);
+						Bukkit.getServer().broadcastMessage("assauts activés");
+					}
+				}.runTask(AgeOfEmpire.getInstance());
+			}
+		}.runTaskAsynchronously(AgeOfEmpire.getInstance());
+	}
+
 	/**
 	 * Check if it's the end of the game, and return last team if it's the end.
 	 * @return null if it's not the end, or instance of {@link GameTeam} of the last team alive.

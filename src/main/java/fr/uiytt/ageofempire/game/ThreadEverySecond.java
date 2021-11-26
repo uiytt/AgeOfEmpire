@@ -59,7 +59,7 @@ public class ThreadEverySecond {
 			if (secondFromStart <= assaultTimer) {
 				GameScoreboard.updateAssaultTimer(assaultTimer - secondFromStart);
 				if (secondFromStart == assaultTimer - 5) {
-					//game.enableAssaults();
+					game.enableAssaults();
 				}
 			}
 
@@ -79,7 +79,7 @@ public class ThreadEverySecond {
 					team.getTeamBase().updateTeamScoreboard();
 				}
 				if(buildings.get(BuildingType.BANK).isConstructed()) {
-					team.getPlayersUUIDs().forEach(playerUUID -> {GameManager.getGameInstance().getGameData().addGold(playerUUID, 20);});
+					team.getPlayersUUIDs().forEach(playerUUID -> GameManager.getGameInstance().getGameData().addGold(playerUUID, 20));
 					team.getTeamBase().updateTeamScoreboard();
 				}
 			}

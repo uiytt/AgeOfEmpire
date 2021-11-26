@@ -19,7 +19,7 @@ public enum BuildingType {
     ARMORY("Armurie", 1, 200, 175, 1, 1000d, 120, player -> new ArmoryVillagerGUI().open(player)),
     MINE("Mine", 2, 300, 120, 1, 800d, 200, player -> {}),
     SAWMILL("Scierie", 2, 100, 250, 1, 800d, 200, player -> {}),
-    LIBRARY("Bibliothèque", 2, 320, 250, 2, 1100d, 180, player -> new LibraryVillagerGUI().open(player)),
+    LIBRARY("Bibliothèque", 3, 320, 250, 2, 1100d, 180, player -> new LibraryVillagerGUI().open(player)),
     ARCHERY("Archerie", 2, 200, 300, 2, 700d, 150, player -> new ArcheryVillagerGUI().open(player)),
     BANK("Banque", 3, 400, 220, 2, 800d, 200, player -> {}),
     STABLE("Écurie", 3, 100, 400, 2, 700d, 125, player -> new StableVillagerGUI().open(player));

@@ -12,17 +12,21 @@ import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Tag;
+import org.bukkit.entity.Arrow;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.projectiles.ProjectileSource;
 
 import java.util.List;
 import java.util.UUID;
@@ -193,5 +197,22 @@ public class GameListener implements Listener {
                 }
             }
         }
+    }
+
+    @EventHandler
+    public void onDamage(EntityDamageByEntityEvent event) {
+        if(!(GameManager.getGameInstance().getGameData().isGameRunning()) || GameManager.getGameInstance().getGameData().isPvp()) {
+            return;
+        }
+        if(!(event.getEntity() instanceof Player)) {
+            return;
+        }
+        if(event.getDamager().getType() == EntityType.ARROW) {
+            Arrow arrow = (Arrow) event.getDamager();
+            ProjectileSource damager = arrow.getShooter();
+            if(!(damager instanceof Player)) return;
+        } else if(!(event.getDamager() instanceof Player)) return;
+
+        event.setCancelled(true);
     }
 }

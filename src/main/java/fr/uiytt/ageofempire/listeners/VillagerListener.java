@@ -2,6 +2,7 @@ package fr.uiytt.ageofempire.listeners;
 
 import fr.uiytt.ageofempire.base.Building;
 import fr.uiytt.ageofempire.base.BuildingType;
+import fr.uiytt.ageofempire.game.GameData;
 import fr.uiytt.ageofempire.game.GameManager;
 import fr.uiytt.ageofempire.game.GameTeam;
 import fr.uiytt.ageofempire.utils.ColorLink;
@@ -25,9 +26,15 @@ public class VillagerListener implements Listener {
 
     @EventHandler
     public void onEntityDamage(EntityDamageByEntityEvent event) {
-        if(!GameManager.getGameInstance().getGameData().isGameRunning()) return;
+        GameData gameData = GameManager.getGameInstance().getGameData();
+        if(!gameData.isGameRunning()) return;
         if(!(event.getEntity() instanceof Villager villager)) return;
         if (villager.getCustomName() == null) return;
+        if(!gameData.isAssaults()) {
+            event.setCancelled(true);
+            return;
+        }
+
         //Prevent mobs from damaging the villagers
         if(!(event.getDamager() instanceof Player)) {
             event.setCancelled(true);
@@ -37,7 +44,7 @@ public class VillagerListener implements Listener {
         //Get the team of the villager from the name
         ColorLink colorLink = ColorLink.getColorFromString(villager.getCustomName().substring(0,2));
         GameTeam villagerGameTeam = null;
-        for(GameTeam iteratorTeam : GameManager.getGameInstance().getGameData().getTeams()) {
+        for(GameTeam iteratorTeam : gameData.getTeams()) {
             if(iteratorTeam.getColor() == colorLink) {
                 villagerGameTeam = iteratorTeam;
                 break;
@@ -46,7 +53,7 @@ public class VillagerListener implements Listener {
         if(villagerGameTeam == null) return;
 
         //Check if player attacking is on the same team of the villager
-        if(GameManager.getGameInstance().getGameData().getPlayersTeam().get(event.getDamager().getUniqueId()).getName().equals(villagerGameTeam.getName())) {
+        if(gameData.getPlayersTeam().get(event.getDamager().getUniqueId()).getName().equals(villagerGameTeam.getName())) {
             event.setCancelled(true);
             return;
         }
