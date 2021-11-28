@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.GameRule;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.HumanEntity;
@@ -105,6 +106,9 @@ public class GameManager {
 		world.setGameRule(GameRule.DO_MOB_SPAWNING, false);
 		world.setGameRule(GameRule.DO_WEATHER_CYCLE,false);
 
+		for (Location location : ConfigManager.getSeaLanterns()) {
+			world.getBlockAt(location).setType(Material.BEDROCK);
+		}
 
 	}
 
@@ -178,6 +182,9 @@ public class GameManager {
 					@Override
 					public void run() {
 						gameData.setPvp(true);
+						for (Location location : ConfigManager.getSeaLanterns()) {
+							world.getBlockAt(location).setType(Material.SEA_LANTERN);
+						}
 						GameScoreboard.updatePvpTimer(-1);
 						Bukkit.getServer().broadcastMessage("pvp activé");
 					}

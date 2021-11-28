@@ -53,6 +53,15 @@ public class Command implements CommandExecutor, TabCompleter {
                 playerTeam.getTeamBase().setAge(playerTeam.getTeamBase().getAge() + 1);
                 //player.getInventory().addItem(Utils.newItemStack(playerTeam.getColor().getWool(), BuildingType.FORGE.getDisplayName(), List.of("&8" + BuildingType.FORGE.getDisplayName(), "&8AOE")));
             }
+            case "force" -> {
+                if (!GameManager.getGameInstance().getGameData().isGameRunning()) return false;
+                if(args[1].equalsIgnoreCase("pvp")) {
+                    GameManager.getGameInstance().enablePVP();
+                } else if(args[1].equalsIgnoreCase("assaults")) {
+                    GameManager.getGameInstance().enableAssaults();
+                }
+                //player.getInventory().addItem(Utils.newItemStack(playerTeam.getColor().getWool(), BuildingType.FORGE.getDisplayName(), List.of("&8" + BuildingType.FORGE.getDisplayName(), "&8AOE")));
+            }
         }
         return true;
     }

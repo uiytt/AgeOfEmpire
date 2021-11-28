@@ -138,6 +138,14 @@ public class GameListener implements Listener {
             player.sendMessage("+ 10 Bois, +10 Gold");
             player.giveExp(1);
             gameTeam.getTeamBase().updateTeamScoreboard();
+        } else if(event.getBlock().getType() == Material.SEA_LANTERN) {
+            gameTeam.getTeamBase().addWood(10);
+            gameTeam.getTeamBase().addStone(8);
+            gameData.getGold().put(player.getUniqueId(), gameData.getGold().get(player.getUniqueId()) + 10);
+            player.sendMessage("+8 Stone + 10 Bois, +10 Gold");
+            player.giveExp(1);
+            gameTeam.getTeamBase().updateTeamScoreboard();
+            event.setCancelled(true);
         }
 
     }
