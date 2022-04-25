@@ -14,13 +14,13 @@ AgeOfEmpire will be 100% free (including buildings and the map) once it's done. 
 
 |Part | Progression | Name |
 |------|-------------| ----- |
-|Plugin|65%|uiytt
-|Configuration| 0% | Not started 
+|Plugin|65%|uiytt, kumakuma215|
+|Configuration| 0% | Not started| 
 |Builds|60%|Xaymoh, Gabi___ and Aeifka|
-|Map| 0% | **Searching for someone**
-|Translation|0% | Not started
+|Map| 0% | **Searching for someone**|
+|Translation|0% | Not started|
 
-Once done the plugin will be availabe on [SpigotMC](spigotmc.org/)
+Once done the plugin will be availabe on [SpigotMC](www.spigotmc.org)
 
 ## :camera: Screenshots
 |Armory| Archery | Kennel |
