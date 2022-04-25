@@ -104,23 +104,22 @@ class GameListener : Listener {
         }
 
         event.isDropItems = false
-        if(getGameManager().gameData.gold[event.player.uniqueId] == null) getGameManager().gameData.gold[event.player.uniqueId] = 0
         if (event.block.type == Material.ANDESITE) {
             gameTeam.teamBase.stone += 8
-            getGameManager().gameData.gold[event.player.uniqueId] = getGameManager().gameData.gold[event.player.uniqueId]!! + 10
+            getGameManager().gameData.addGold(event.player.uniqueId, 10)
             event.player.giveExp(1)
             event.player.sendMessage("+ 8 Stone, +10 Gold")
             gameTeam.teamBase.updateTeamScoreboard()
         } else if (Tag.LOGS.isTagged(event.block.type)) {
             gameTeam.teamBase.wood += 10
-            getGameManager().gameData.gold[event.player.uniqueId] = getGameManager().gameData.gold[event.player.uniqueId]!! + 10
+            getGameManager().gameData.addGold(event.player.uniqueId, 10)
             event.player.giveExp(1)
             event.player.sendMessage("+ 10 Bois, +10 Gold")
             gameTeam.teamBase.updateTeamScoreboard()
         } else if (event.block.type == Material.SEA_LANTERN) {
             gameTeam.teamBase.wood += 10
             gameTeam.teamBase.stone += 8
-            getGameManager().gameData.gold[event.player.uniqueId] = getGameManager().gameData.gold[event.player.uniqueId]!! + 10
+            getGameManager().gameData.addGold(event.player.uniqueId, 10)
             event.player.giveExp(1)
             event.player.sendMessage("+8 Stone + 10 Bois, +10 Gold")
             gameTeam.teamBase.updateTeamScoreboard()
