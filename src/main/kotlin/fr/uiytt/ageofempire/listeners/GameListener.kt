@@ -6,6 +6,7 @@ import fr.uiytt.ageofempire.base.Plot.Companion.checkForPlot
 import fr.uiytt.ageofempire.game.GameTeam
 import fr.uiytt.ageofempire.game.GameTeam.Companion.reorganizeTeam
 import fr.uiytt.ageofempire.game.getGameManager
+import fr.uiytt.ageofempire.game.getPlayerTeam
 import fr.uiytt.ageofempire.game.isRunning
 import fr.uiytt.ageofempire.getConfigManager
 import net.md_5.bungee.api.ChatColor
@@ -33,7 +34,7 @@ import org.bukkit.scheduler.BukkitRunnable
 class GameListener : Listener {
     @EventHandler
     fun onPlayerJoin(event: PlayerJoinEvent) {
-        val team: GameTeam? = getGameManager().gameData.playersTeam[event.player.uniqueId]
+        val team: GameTeam? = event.player.uniqueId.getPlayerTeam()
         if (getGameManager().isRunning() && team != null) {
             event.player.setPlayerListName(team.color.tabColor.toString() + event.player.displayName)
             return
@@ -43,7 +44,7 @@ class GameListener : Listener {
     @EventHandler
     fun onPlayerLeave(event: PlayerQuitEvent) {
         if (getGameManager().isRunning()) return
-        getGameManager().gameData.playersTeam[event.player.uniqueId]?.removePlayer(event.player.uniqueId)
+        event.player.uniqueId.getPlayerTeam()?.removePlayer(event.player.uniqueId)
     }
 
     @EventHandler
@@ -53,7 +54,7 @@ class GameListener : Listener {
         val lore = itemMeta.lore
         if (lore == null || !lore[1].contains("AOE")) return
         event.isCancelled = true
-        val playerTeam: GameTeam = getGameManager().gameData.playersTeam[event.player.uniqueId]!!
+        val playerTeam: GameTeam = event.player.uniqueId.getPlayerTeam()!!
         val plot = checkForPlot(playerTeam.teamBase, event.block.location.subtract(0.0, 1.0, 0.0))
 
         //Check that plot can be built upon
@@ -97,7 +98,7 @@ class GameListener : Listener {
     @EventHandler
     fun onBlockBreak(event: BlockBreakEvent) {
         if (!getGameManager().isRunning()) return
-        val gameTeam: GameTeam = getGameManager().gameData.playersTeam[event.player.uniqueId]!!
+        val gameTeam: GameTeam = event.player.uniqueId.getPlayerTeam()!!
         if (!getConfigManager().getSetOfBreakableBlocks().contains(event.block.type)) {
             event.isCancelled = true
             return
@@ -131,7 +132,7 @@ class GameListener : Listener {
     fun onDeath(event: PlayerDeathEvent) {
         if (!getGameManager().isRunning()) return
         val deadPlayer = event.entity
-        val gameTeam: GameTeam = getGameManager().gameData.playersTeam[deadPlayer.uniqueId]!!
+        val gameTeam: GameTeam = deadPlayer.uniqueId.getPlayerTeam()!!
         event.drops.removeIf { itemStack: ItemStack -> getConfigManager().getSetOfDeletedDrops().contains(itemStack.type) }
         deadPlayer.gameMode = GameMode.SPECTATOR
 
@@ -156,7 +157,7 @@ class GameListener : Listener {
     @EventHandler
     fun onChat(event: AsyncPlayerChatEvent) {
         if (!getGameManager().isRunning()) return
-        val gameTeam: GameTeam = getGameManager().gameData.playersTeam[event.player.uniqueId]!!
+        val gameTeam: GameTeam = event.player.uniqueId.getPlayerTeam()?: return
         event.isCancelled = true
         if (event.player.gameMode != GameMode.SPECTATOR || gameTeam.teamBase.isForumAlive) {
             if (event.message[0] == '*') {

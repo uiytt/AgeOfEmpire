@@ -47,7 +47,7 @@ class GameManager {
         val playersUUIDs: List<UUID> = gameData.alivePlayers.toMutableList().shuffled()
 
         for (playerUUID in playersUUIDs) {
-            if (gameData.playersTeam[playerUUID] != null) continue
+            if (playerUUID.getPlayerTeam() != null) continue
 
             var smallestTeam = gameData.teams[0]
             for (team in gameData.teams) {

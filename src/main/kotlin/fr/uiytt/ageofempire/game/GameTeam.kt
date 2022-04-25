@@ -58,14 +58,14 @@ class GameTeam(val color: ColorLink, val name: String) {
      * Remove all players from this team.
      */
     fun removeAllPlayers() {
-        playersUUIDs.forEach { getGameManager().gameData.playersTeam.remove(it) }
+        playersUUIDs.forEach { playersUUIDs.remove(it) }
         playersUUIDs.clear()
     }
 
     companion object {
         @JvmStatic
         fun removePlayerFromAllTeams(playerUUID: UUID) {
-            getGameManager().gameData.playersTeam[playerUUID]?.removePlayer(playerUUID)
+            playerUUID.getPlayerTeam()?.removePlayer(playerUUID)
         }
 
         /**
@@ -84,4 +84,8 @@ class GameTeam(val color: ColorLink, val name: String) {
             }
         }
     }
+}
+
+fun UUID.getPlayerTeam(): GameTeam? {
+    return getGameManager().gameData.playersTeam[this]
 }

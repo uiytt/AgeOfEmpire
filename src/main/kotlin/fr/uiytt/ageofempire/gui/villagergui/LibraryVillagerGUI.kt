@@ -4,6 +4,7 @@ import fr.minuskube.inv.SmartInventory
 import fr.minuskube.inv.content.InventoryContents
 import fr.uiytt.ageofempire.AgeOfEmpire
 import fr.uiytt.ageofempire.base.BuildingType
+import fr.uiytt.ageofempire.game.getPlayerTeam
 import fr.uiytt.ageofempire.gui.GUIUtils.addBuyableItem
 import org.bukkit.ChatColor
 import org.bukkit.Material
@@ -25,7 +26,7 @@ class LibraryVillagerGUI : VillagerGUI() {
 
     override fun init(player: Player, contents: InventoryContents) {
         super.init(player, contents)
-        val teamBase = gameData.playersTeam[player.uniqueId]!!.teamBase
+        val teamBase = player.uniqueId.getPlayerTeam()!!.teamBase
         addBuyableItem(contents, player, 1, 1, enchantingBookItemBuilding(Enchantment.DAMAGE_ALL, 1, null), 60)
         addBuyableItem(contents, player, 2, 1, enchantingBookItemBuilding(Enchantment.DIG_SPEED, 1, null), 50)
         addBuyableItem(contents, player, 3, 1, enchantingBookItemBuilding(Enchantment.DURABILITY, 1, null), 20)

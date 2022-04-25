@@ -4,6 +4,7 @@ import fr.minuskube.inv.SmartInventory
 import fr.minuskube.inv.content.InventoryContents
 import fr.uiytt.ageofempire.AgeOfEmpire
 import fr.uiytt.ageofempire.base.BuildingType
+import fr.uiytt.ageofempire.game.getPlayerTeam
 import fr.uiytt.ageofempire.gui.GUIUtils.addBuyableItem
 import org.bukkit.Material
 import org.bukkit.entity.Player
@@ -25,7 +26,7 @@ class ArcheryVillagerGUI : VillagerGUI() {
 
     override fun init(player: Player, contents: InventoryContents) {
         super.init(player, contents)
-        val teamBase = gameData.playersTeam[player.uniqueId]!!.teamBase
+        val teamBase = player.uniqueId.getPlayerTeam()!!.teamBase
         addBuyableItem(contents, player, 1, 1, Material.BOW, 100)
         addBuyableItem(contents, player, 1, 2, Material.ARROW, 20, 8)
         if (teamBase.age >= 3) {

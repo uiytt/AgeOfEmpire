@@ -6,6 +6,7 @@ import fr.uiytt.ageofempire.base.BuildingType
 import fr.uiytt.ageofempire.base.BuildingType.Companion.getBuildingTypeFromName
 import fr.uiytt.ageofempire.game.GameTeam
 import fr.uiytt.ageofempire.game.getGameManager
+import fr.uiytt.ageofempire.game.getPlayerTeam
 import fr.uiytt.ageofempire.game.isRunning
 import fr.uiytt.ageofempire.utils.ColorLink
 import fr.uiytt.ageofempire.utils.Utils
@@ -51,7 +52,7 @@ class VillagerListener: Listener {
         if(villagerGameTeam == null) return 
 
         //Check if player attacking is on the same team of the villager
-        if(getGameManager().gameData.playersTeam[event.damager.uniqueId]!!.color != colorLink) {
+        if(event.damager.uniqueId.getPlayerTeam()?.color != colorLink) {
             event.isCancelled = true
             return 
         }
@@ -133,7 +134,7 @@ class VillagerListener: Listener {
         if (villagerGameTeam == null) return
 
         //Check if player rightclicking is on the team of the villager
-        if (gameManager.gameData.playersTeam[event.player.uniqueId]!!.color != colorLink) return
+        if (event.player.uniqueId.getPlayerTeam()?.color != colorLink) return
         val type = event.rightClicked.customName!!.split((org.bukkit.ChatColor.GRAY.toString() + " - ").toRegex())
             .dropLastWhile { it.isEmpty() }
             .toTypedArray()[0].substring(2)

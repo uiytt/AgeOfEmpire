@@ -7,7 +7,7 @@ import fr.uiytt.ageofempire.AgeOfEmpire
 import fr.uiytt.ageofempire.base.BuildingType
 import fr.uiytt.ageofempire.base.TeamBase
 import fr.uiytt.ageofempire.game.GameTeam
-import fr.uiytt.ageofempire.game.getGameManager
+import fr.uiytt.ageofempire.game.getPlayerTeam
 import fr.uiytt.ageofempire.utils.Utils.newItemStack
 import net.md_5.bungee.api.ChatColor
 import org.bukkit.Bukkit
@@ -30,7 +30,7 @@ class ForumVillagerGUI : VillagerGUI() {
 
     override fun init(player: Player, contents: InventoryContents) {
         super.init(player, contents)
-        val gameTeam: GameTeam = getGameManager().gameData.playersTeam[player.uniqueId]!!
+        val gameTeam: GameTeam = player.uniqueId.getPlayerTeam()!!
         this.teamBase = gameTeam.teamBase
         this.player = player
         contents[0, 4] = ClickableItem.empty(newItemStack(gameTeam.color.wool, "&fAge " + teamBase.age, null))

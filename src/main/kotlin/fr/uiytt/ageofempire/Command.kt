@@ -2,6 +2,7 @@ package fr.uiytt.ageofempire
 
 import fr.uiytt.ageofempire.game.GameTeam
 import fr.uiytt.ageofempire.game.getGameManager
+import fr.uiytt.ageofempire.game.getPlayerTeam
 import fr.uiytt.ageofempire.game.isRunning
 import fr.uiytt.ageofempire.gui.TeamGui
 import org.bukkit.Bukkit
@@ -39,7 +40,7 @@ class Command: CommandExecutor, TabCompleter {
             }
             "test" -> {
                 if (sender !is Player || getGameManager().isRunning()) return false
-                val playerTeam: GameTeam = getGameManager().gameData.playersTeam[sender.uniqueId]!!
+                val playerTeam: GameTeam = sender.uniqueId.getPlayerTeam()!!
                 playerTeam.teamBase.age += 1
             }
             "force" -> {

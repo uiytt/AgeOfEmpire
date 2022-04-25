@@ -7,6 +7,7 @@ import fr.uiytt.ageofempire.AgeOfEmpire
 import fr.uiytt.ageofempire.base.BuildingType
 import fr.uiytt.ageofempire.game.GameScoreboard.Companion.playersScoreboard
 import fr.uiytt.ageofempire.game.getGameManager
+import fr.uiytt.ageofempire.game.getPlayerTeam
 import fr.uiytt.ageofempire.utils.Utils.newItemStack
 import net.md_5.bungee.api.ChatColor
 import org.bukkit.Location
@@ -30,7 +31,7 @@ class StableVillagerGUI : VillagerGUI() {
     }
 
     override fun init(player: Player, contents: InventoryContents) {
-        val teamBase = gameData.playersTeam[player.uniqueId]!!.teamBase
+        val teamBase = player.uniqueId.getPlayerTeam()!!.teamBase
         contents.fillBorders(
             ClickableItem.empty(newItemStack(Material.GRAY_STAINED_GLASS_PANE, ChatColor.GRAY.toString() + "", listOf("")))
         )
