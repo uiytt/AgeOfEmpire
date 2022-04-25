@@ -23,6 +23,7 @@ public class ForumVillagerGUI extends VillagerGUI {
 
     private TeamBase teamBase;
     private Player player;
+
     public ForumVillagerGUI() {
         super.inventory = SmartInventory.builder()
                 .id("AOE_Forum")
@@ -36,18 +37,18 @@ public class ForumVillagerGUI extends VillagerGUI {
 
     @Override
     public void init(Player player, InventoryContents contents) {
+        super.init(player, contents);
         GameTeam gameTeam = GameManager.getGameInstance().getGameData().getPlayersTeam().get(player.getUniqueId());
         teamBase = gameTeam.getTeamBase();
         this.player = player;
 
-        contents.fillBorders(ClickableItem.empty(Utils.newItemStack(Material.GRAY_STAINED_GLASS_PANE, ChatColor.GRAY + "", List.of("") )));
         contents.set(0, 4, ClickableItem.empty(Utils.newItemStack(gameTeam.getColor().getWool(), "&fAge " + teamBase.getAge(), null)));
 
         contents.set(1, 3, buildItemStackForBuilds(BuildingType.FORGE, Material.ANVIL, List.of("&7Vous permet d'acheter des", "&7armes et des outils.")));
         contents.set(1, 4, buildItemStackForBuilds(BuildingType.MILL, Material.BREAD, List.of("&7Vous permet d'acheter de", "&7la nourriture.")));
         contents.set(1, 5, buildItemStackForBuilds(BuildingType.ARMORY, Material.IRON_CHESTPLATE, List.of("&7Vous permet d'achter des", "&7armures.")));
 
-        if(teamBase.getAge() >= 2) {
+        if (teamBase.getAge() >= 2) {
             contents.set(2, 2, buildItemStackForBuilds(BuildingType.MINE, Material.ANDESITE, List.of("&7Vous donne 20 de stone", "&7toutes les minutes.")));
             contents.set(2, 3, buildItemStackForBuilds(BuildingType.SAWMILL, Material.OAK_LOG, List.of("&7Vous donne 20 de bois", "&7toutes les minutes.")));
             contents.set(2, 5, buildItemStackForBuilds(BuildingType.ARCHERY, Material.BOW, List.of("&7Vous permet d'acheter arcs et boucliers.")));
@@ -63,33 +64,34 @@ public class ForumVillagerGUI extends VillagerGUI {
                                 "&7&lÂGE 3 :",
                                 "&a400 de pierres",
                                 "&a450 de bois"))
-                        , event -> upgradeAge(3, 400,450));
+                        , event -> upgradeAge(3, 400, 450));
             }
             case 3 -> {
                 ageItem = ClickableItem.of(Utils.newItemStack(Material.DIAMOND, "&ePasser à l'âge 4", List.of(
                                 "&7&lÂGE 4 :",
                                 "&a1300 de pierres",
                                 "&a1000 de bois"))
-                        , event -> upgradeAge(4,1300,1000));
+                        , event -> upgradeAge(4, 1300, 1000));
             }
             case 4 -> {
                 ageItem = ClickableItem.empty(Utils.newItemStack(Material.IRON_INGOT, "&eVous êtes Âge 4", null));
             }
             default -> ageItem = ClickableItem.of(Utils.newItemStack(Material.IRON_INGOT, "&ePasser à l'âge 2", List.of(
-                    "&7&lÂGE 2 :",
-                    "&a200 de pierres",
-                    "&a250 de bois"))
-                    , event -> upgradeAge(2, 200,250));
+                            "&7&lÂGE 2 :",
+                            "&a200 de pierres",
+                            "&a250 de bois"))
+                    , event -> upgradeAge(2, 200, 250));
         }
-        contents.set(4,4, ageItem);
+        contents.set(4, 4, ageItem);
     }
 
     @Override
     public void update(Player player, InventoryContents contents) {
 
     }
+
     private void buyBuilding(BuildingType buildingType) {
-        if(teamBase.getStone() >= buildingType.getStoneCost() && teamBase.getWood() >= buildingType.getWoodCost()) {
+        if (teamBase.getStone() >= buildingType.getStoneCost() && teamBase.getWood() >= buildingType.getWoodCost()) {
             teamBase.addStone(-buildingType.getStoneCost());
             teamBase.addWood(-buildingType.getWoodCost());
             teamBase.updateTeamScoreboard();
@@ -100,12 +102,12 @@ public class ForumVillagerGUI extends VillagerGUI {
     }
 
     private void upgradeAge(int age, int costStone, int costWood) {
-        if(teamBase.getAge() + 1 != age) {
+        if (teamBase.getAge() + 1 != age) {
             player.closeInventory();
             player.sendMessage("Vous êtes déjà à cette âge.");
             return;
         }
-        if(teamBase.getStone() < costStone || teamBase.getWood() < costWood) {
+        if (teamBase.getStone() < costStone || teamBase.getWood() < costWood) {
             player.sendMessage(ChatColor.RED + "Vous n'avez pas assez de ressources.");
             return;
         }
@@ -115,7 +117,7 @@ public class ForumVillagerGUI extends VillagerGUI {
         teamBase.updateTeamScoreboard();
         teamBase.getGameTeam().getPlayersUUIDs().forEach(playerUUID -> {
             Player player = Bukkit.getPlayer(playerUUID);
-            if(player == null) return;
+            if (player == null) return;
             player.closeInventory();
         });
         Bukkit.broadcastMessage(teamBase.getGameTeam().getColor().getChatColor() + "L'équipe " + teamBase.getGameTeam().getName() + " est passée âge " + teamBase.getAge());
@@ -127,9 +129,9 @@ public class ForumVillagerGUI extends VillagerGUI {
         lore.add("");
         lore.add("&a" + buildingType.getStoneCost() + " de pierres");
         lore.add("&a" + buildingType.getWoodCost() + " de bois");
-        if(buildingType.getAge() > teamBase.getAge()) {
+        if (buildingType.getAge() > teamBase.getAge()) {
             return ClickableItem.empty(Utils.newItemStack(Material.WHITE_STAINED_GLASS_PANE, "&f" + buildingType.getDisplayName() + "&7 - Age " + buildingType.getAge(), lore));
-        } else if(building != null && !building.isAvailable()) {
+        } else if (building != null && !building.isAvailable()) {
             return ClickableItem.empty(Utils.newItemStack(Material.BEDROCK, "&f" + buildingType.getDisplayName() + "&7 - Déjà construit", lore));
         } else {
             return ClickableItem.of(Utils.newItemStack(material, "&e" + buildingType.getDisplayName(), lore), event -> buyBuilding(buildingType));
