@@ -12,7 +12,7 @@ abstract class VillagerGUI protected constructor() : InventoryProvider {
     protected val gameData: GameData = getGameManager().gameData
     protected lateinit var inventory: SmartInventory
 
-    fun open(player: Player?) {
+    fun open(player: Player) {
         inventory.open(player)
     }
 
