@@ -4,6 +4,7 @@ import fr.uiytt.ageofempire.base.TeamBase
 import fr.uiytt.ageofempire.utils.ColorLink
 import fr.uiytt.ageofempire.utils.PlayerFromUUIDNotFoundException
 import org.bukkit.Bukkit
+import org.bukkit.entity.Player
 import java.util.*
 
 /**
@@ -88,4 +89,8 @@ class GameTeam(val color: ColorLink, val name: String) {
 
 fun UUID.getPlayerTeam(): GameTeam? {
     return getGameManager().gameData.playersTeam[this]
+}
+
+fun Player.getPlayerTeam(): GameTeam? {
+    return getGameManager().gameData.playersTeam[this.uniqueId]
 }

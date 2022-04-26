@@ -1,7 +1,8 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.6.20"
+    kotlin("jvm") version "1.6.21"
+    id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
 group = "fr.uiytt"
@@ -16,7 +17,7 @@ repositories {
 
 dependencies {
     compileOnly("org.spigotmc:spigot-api:1.18.2-R0.1-SNAPSHOT")
-    implementation(kotlin("stdlib-jdk17"))
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.21")
     implementation("com.github.simplix-softworks:simplixstorage:3.2.4")
     implementation("fr.minuskube.inv:smart-invs:1.2.7")
 }
