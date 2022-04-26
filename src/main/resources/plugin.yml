@@ -1,6 +1,6 @@
 main: fr.uiytt.ageofempire.AgeOfEmpire
 name: AgeOfEmpire
-version: {.version.}
+version: ${version}
 author: uiytt
 description: A recreation of the AOE game from Epicube. A game for 4 teams with base building
 api-version: 1.14
