@@ -13,7 +13,9 @@ abstract class VillagerGUI protected constructor() : InventoryProvider {
     protected lateinit var inventory: SmartInventory
 
     fun open(player: Player) {
-        inventory.open(player)
+        if(player.getPlayerTeam() != null) {
+            inventory.open(player)
+        }
     }
 
     override fun init(player: Player, contents: InventoryContents) {
