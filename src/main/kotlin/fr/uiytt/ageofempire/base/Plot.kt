@@ -2,9 +2,9 @@ package fr.uiytt.ageofempire.base
 
 import fr.uiytt.ageofempire.AgeOfEmpire
 import fr.uiytt.ageofempire.game.GameTeam
+import fr.uiytt.ageofempire.stringToLocation
 import fr.uiytt.ageofempire.structures.Structure
 import fr.uiytt.ageofempire.structures.StructureNotLoadedException
-import fr.uiytt.ageofempire.utils.ConfigParser
 import org.bukkit.Location
 import org.bukkit.Tag
 import java.io.File
@@ -30,7 +30,7 @@ class Plot(teamBase: TeamBase, values: Any) {
         try {
             val data = values as LinkedHashMap<String, String>
             size = data["size"]!!.toInt()
-            location = ConfigParser.stringToLocation(data["location"]!!)
+            location = stringToLocation(data["location"]!!)
             side = data["side"]?: side
             if (size > 3 || size < 1 || (location.x == 0.0 && location.y == 80.0 && location.z == 0.0))
                 throw Exception("Size or location load error in plot")
