@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     kotlin("jvm") version "1.6.21"
     id("com.github.johnrengelman.shadow") version "7.1.2"
@@ -13,6 +11,7 @@ repositories {
     maven(url = "https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
     maven(url = "https://oss.sonatype.org/content/repositories/snapshots/")
     maven(url = "https://jitpack.io")
+    maven(url = "https://maven.enginehub.org/repo/")
 }
 
 dependencies {
@@ -20,6 +19,9 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.21")
     implementation("com.github.simplix-softworks:simplixstorage:3.2.4")
     implementation("fr.minuskube.inv:smart-invs:1.2.7")
+
+    implementation("com.sk89q.worldedit:worldedit-core:7.2.6")
+    implementation("com.sk89q.worldedit:worldedit-bukkit:7.2.6")
 }
 
 tasks.processResources {
