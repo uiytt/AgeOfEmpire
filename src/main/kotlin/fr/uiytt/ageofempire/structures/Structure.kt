@@ -17,13 +17,10 @@ import de.leonhard.storage.Yaml
 import fr.uiytt.ageofempire.AgeOfEmpire
 import fr.uiytt.ageofempire.base.Building
 import fr.uiytt.ageofempire.game.getGameManager
-import fr.uiytt.ageofempire.game.isRunning
 import fr.uiytt.ageofempire.stringToLocation
-import org.bukkit.*
-import org.bukkit.scheduler.BukkitRunnable
+import org.bukkit.Location
 import java.io.File
 import java.io.FileInputStream
-import kotlin.math.ceil
 
 class Structure
     /**
@@ -35,11 +32,11 @@ class Structure
      * @param side of the plot, either RIGHT or LEFT
      */
     (private val plugin: AgeOfEmpire, private val structureInfoFile: File, private val building: Building, private val side: String) {
+    val blocks: LinkedHashMap<BlockVector3, BaseBlock> = LinkedHashMap()
     private var width = 0
     private var height = 0
     private var length = 0
     private var villagerRelativeCoordinates: Location? = null
-    private val blocks: LinkedHashMap<BlockVector3, BaseBlock> = LinkedHashMap()
     private val undergroundBlocks: LinkedHashMap<BlockVector3, BaseBlock> = LinkedHashMap()
 
     /**
@@ -105,51 +102,16 @@ class Structure
         } catch (e: MaxChangedBlocksException) {
             e.printStackTrace()
         }
-        val blockPerSecond = ceil(blocks.size.toDouble() / time).toInt()
 
-        object : BukkitRunnable() {
-            private val vectors: Iterator<BlockVector3> = blocks.keys.iterator()
-            private val baseBlocks: Iterator<BaseBlock> = blocks.values.iterator()
-            private val world: World = getGameManager().world
-            private var timer = 0
-
-            /**
-             * Paste a number of blocks per second.
-             */
-            override fun run() {
-                if (!getGameManager().isRunning()) {
-                    cancel()
-                    return
-                }
-                var vector3: BlockVector3? = null
-                try {
-                    WorldEdit.getInstance().newEditSession(BukkitWorld(world)).run {
-                        for (i in 0 until blockPerSecond) {
-                            if (!vectors.hasNext()) break
-                            vector3 = vectors.next().add(location.blockX, location.blockY, location.blockZ)
-                            this.setBlock(vector3, baseBlocks.next())
-                        }
-                    }
-                } catch (e: MaxChangedBlocksException) {
-                    e.printStackTrace()
-                }
-                if (vector3 != null) {
-                    val blockLocation = Location(world, vector3!!.blockX.toDouble(), vector3!!.blockY.toDouble(), vector3!!.blockZ.toDouble())
-                    world.spawnParticle(Particle.CLOUD, blockLocation, 6)
-                    world.playEffect(blockLocation, Effect.STEP_SOUND, Material.STONE)
-                }
-                timer++
-                if (!vectors.hasNext() && timer >= time) {
-                    cancel()
-                    building.inConstruction = false
-                    building.isConstructed = true
-                    val villagerCoordinate = Location(world, 0.0, 0.0, 0.0, villagerRelativeCoordinates!!.yaw, villagerRelativeCoordinates!!.pitch)
-                    villagerCoordinate.x = villagerRelativeCoordinates!!.x + location.blockX
-                    villagerCoordinate.y = villagerRelativeCoordinates!!.y + location.blockY
-                    villagerCoordinate.z = villagerRelativeCoordinates!!.z + location.blockZ
-                    building.summonBuildingVillager(villagerCoordinate)
-                }
-            }
-        }.runTaskTimer(plugin, 0, 20)
+        StructureBuilderRunnable(this, location, time)
+            {   //Execute once finish
+                building.inConstruction = false
+                building.isConstructed = true
+                val villagerCoordinate = Location(getGameManager().world, 0.0, 0.0, 0.0, villagerRelativeCoordinates!!.yaw, villagerRelativeCoordinates!!.pitch)
+                villagerCoordinate.x = villagerRelativeCoordinates!!.x + location.blockX
+                villagerCoordinate.y = villagerRelativeCoordinates!!.y + location.blockY
+                villagerCoordinate.z = villagerRelativeCoordinates!!.z + location.blockZ
+                building.summonBuildingVillager(villagerCoordinate)
+            }.runTaskTimer(plugin, 0, 20)
     }
 }
