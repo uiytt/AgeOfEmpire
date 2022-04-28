@@ -12,7 +12,13 @@ import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.util.Consumer
 import kotlin.math.ceil
 
-
+/**
+ * Runnable to build step by step a structure
+ * @param structure a structure loaded with [Structure.loadStructure]
+ * @param pasteLocation where to past
+ * @param timeToFinish how long should it take to finish
+ * @param consumerFinish consummer executed when finish
+ */
 class StructureBuilderRunnable(
     structure: Structure,
     private val pasteLocation: Location,

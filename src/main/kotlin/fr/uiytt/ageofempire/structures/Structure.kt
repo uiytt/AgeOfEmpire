@@ -22,16 +22,15 @@ import org.bukkit.Location
 import java.io.File
 import java.io.FileInputStream
 
-class Structure
-    /**
-     * Create a Structure object handling loading and pasting of a schematic
-     * At the end, it spawns a villager
-     * @param plugin JavaPlugin instance
-     * @param structureInfoFile Yaml File with information such as schematic location, and villager coordinates
-     * @param building [Building] of a Team, mainly to prevent multiple instancies of this building in the same team.
-     * @param side of the plot, either RIGHT or LEFT
-     */
-    (private val plugin: AgeOfEmpire, private val structureInfoFile: File, private val building: Building, private val side: String) {
+/**
+ * Create a Structure object handling loading and pasting of a schematic
+ * At the end, it spawns a villager
+ * @param plugin JavaPlugin instance
+ * @param structureInfoFile Yaml File with information such as schematic location, and villager coordinates
+ * @param building [Building] of a Team, mainly to prevent multiple instancies of this building in the same team.
+ * @param side of the plot, either RIGHT or LEFT
+ */
+class Structure(private val plugin: AgeOfEmpire, private val structureInfoFile: File, private val building: Building, private val side: String) {
     val blocks: LinkedHashMap<BlockVector3, BaseBlock> = LinkedHashMap()
     private var width = 0
     private var height = 0

@@ -10,6 +10,14 @@ import org.bukkit.entity.Villager
 import java.util.*
 import java.util.function.Consumer
 
+/**
+ * A building store and manage different type of
+ * information for a certain [BuildingType]
+ * All [BuildingType] should have a building
+ * even if not yet constructed
+ * @param buildingType a type of building
+ * @param teamBase the base to which the building belong
+ */
 class Building(private val buildingType: BuildingType, private val teamBase: TeamBase) {
     var inConstruction = false
     var isConstructed = false

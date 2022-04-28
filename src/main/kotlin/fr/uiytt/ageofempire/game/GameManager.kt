@@ -36,8 +36,8 @@ class GameManager {
         startPlayerTP(players)
 
         gameData.isGameRunning = true
-        //Start action at every second
-        ThreadEverySecond().init(AgeOfEmpire.instance, this)
+        //Start runnable run every second (timer, etc..)
+        SecondRunnable().runTaskTimer(AgeOfEmpire.instance, 1, 20)
     }
 
     /**

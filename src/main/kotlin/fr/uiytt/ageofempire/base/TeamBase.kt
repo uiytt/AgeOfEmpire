@@ -15,6 +15,8 @@ import java.io.File
 /**
  * All data linked to the base of team
  * Information such as ressources, Age and plots are stored here.
+ *
+ * @param gameTeam to which team the base belong
  */
 class TeamBase(val gameTeam: GameTeam) {
     val yamlBase: Yaml = Yaml("config.yml", "plugins" + File.separator + "AgeOfEmpire" + File.separator + gameTeam.color.name)
