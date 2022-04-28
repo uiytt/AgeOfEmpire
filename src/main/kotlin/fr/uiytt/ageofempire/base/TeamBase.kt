@@ -4,7 +4,7 @@ import de.leonhard.storage.Yaml
 import fr.uiytt.ageofempire.game.GameScoreboard.Companion.playersScoreboard
 import fr.uiytt.ageofempire.game.GameTeam
 import fr.uiytt.ageofempire.game.getGameManager
-import fr.uiytt.ageofempire.utils.ConfigParser
+import fr.uiytt.ageofempire.stringToLocation
 import org.bukkit.ChatColor
 import org.bukkit.Location
 import org.bukkit.attribute.Attribute
@@ -18,7 +18,7 @@ import java.io.File
  */
 class TeamBase(val gameTeam: GameTeam) {
     val yamlBase: Yaml = Yaml("config.yml", "plugins" + File.separator + "AgeOfEmpire" + File.separator + gameTeam.color.name)
-    val spawnTeam: Location = ConfigParser.stringToLocation(yamlBase.getOrDefault("spawn", "20 80 20"))
+    val spawnTeam: Location = stringToLocation(yamlBase.getOrDefault("spawn", "20 80 20"))
     val builds = HashMap<BuildingType, Building>()
     val plots = HashMap<Location, Plot>()
     var age = 1
@@ -33,7 +33,7 @@ class TeamBase(val gameTeam: GameTeam) {
         yamlBase.getList("plots").forEach {Plot(this, it!!)}
         val building = builds[BuildingType.FORUM]!!
         val villager = getGameManager().world.spawnEntity(
-            ConfigParser.stringToLocation(yamlBase.getOrDefault("villager", "13 70 0")),
+            stringToLocation(yamlBase.getOrDefault("villager", "13 70 0")),
             EntityType.VILLAGER
         ) as Villager
         villager.health = 20.0

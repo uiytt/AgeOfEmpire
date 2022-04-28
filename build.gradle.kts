@@ -24,9 +24,15 @@ dependencies {
     implementation("com.sk89q.worldedit:worldedit-bukkit:7.2.6")
 }
 
-tasks.processResources {
-    //inputs.property "version", project.version
+tasks.shadowJar {
+    dependencies {
+        include(dependency("fr.minuskube.inv:smart-invs:1.2.7"))
+        include(dependency("com.github.simplix-softworks:simplixstorage:3.2.4"))
+        include(dependency("org.jetbrains.kotlin:kotlin-stdlib:1.6.21"))
+    }
+}
 
+tasks.processResources {
     filesMatching("plugin.yml") {
         expand(mapOf("version" to project.version) )
     }

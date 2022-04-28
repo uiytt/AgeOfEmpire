@@ -1,9 +1,6 @@
 package fr.uiytt.ageofempire
 
-import org.bukkit.Location
-import org.bukkit.Material
-import org.bukkit.Tag
-import org.bukkit.World
+import org.bukkit.*
 
 /**
  * Handle the main config file
@@ -11,7 +8,7 @@ import org.bukkit.World
  */
 class ConfigManager {
     //private static final Yaml configYaml = new Yaml("config.yml", "plugins" + File.separator + "AgeOfEmpire") 
-    var world: World? = null
+    var world: World? = Bukkit.getWorld("world")
     var pvpTimer = 20 * 60
     var assaultTimer = 40 * 60
 
