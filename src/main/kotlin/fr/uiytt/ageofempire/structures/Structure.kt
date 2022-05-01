@@ -26,17 +26,18 @@ import java.io.FileInputStream
  * Create a Structure object handling loading and pasting of a schematic
  * At the end, it spawns a villager
  * @param plugin JavaPlugin instance
- * @param structureInfoFile Yaml File with information such as schematic location, and villager coordinates
+ * @param teamStructureYaml Yaml File with information such as schematic location, and villager coordinates
  * @param building [Building] of a Team, mainly to prevent multiple instancies of this building in the same team.
- * @param side of the plot, either RIGHT or LEFT
+ * @param rightSide is the plot at the left (facing from the center)
  */
-class Structure(private val plugin: AgeOfEmpire, private val structureInfoFile: File, private val building: Building, private val side: String) {
-    val blocks: LinkedHashMap<BlockVector3, BaseBlock> = LinkedHashMap()
-    private var width = 0
+class Structure(private val plugin: AgeOfEmpire, private val teamStructureYaml: Yaml, private val building: Building, private val rightSide: Boolean) {
     private var height = 0
+    private var width = 0
     private var length = 0
     private var villagerRelativeCoordinates: Location? = null
+    private var xFlipped = false
     private val undergroundBlocks: LinkedHashMap<BlockVector3, BaseBlock> = LinkedHashMap()
+    var blocks: LinkedHashMap<BlockVector3, BaseBlock> = LinkedHashMap()
 
     /**
      * Load blocks from schematics
@@ -46,12 +47,13 @@ class Structure(private val plugin: AgeOfEmpire, private val structureInfoFile: 
      */
     @Throws(StructureNotLoadedException::class)
     fun loadStructure(): Structure {
-        val structureYaml = Yaml(structureInfoFile)
-        val schematicFile =
-            File(structureInfoFile.parent + File.separator + "schematics" + File.separator + structureYaml["schem-$side"])
-        villagerRelativeCoordinates = stringToLocation(structureYaml.getOrDefault("villager.$side", "0 0 0"))
+        val schematicFile = File("${teamStructureYaml.file.parent}${File.separator}schematics${File.separator}" +
+                teamStructureYaml.getOrDefault("${building.buildingType.name}.schem", ""))
+        villagerRelativeCoordinates = stringToLocation(teamStructureYaml.getOrDefault("${building.buildingType.name}.villager.${if(rightSide) "RIGHT" else "LEFT"}", "0 0 0"))
+        xFlipped = teamStructureYaml.getOrSetDefault("xFlipped", false)
+
         val format: ClipboardFormat = ClipboardFormats.findByFile(schematicFile) ?: throw StructureNotLoadedException("File ${schematicFile.absolutePath} could not be loaded.")
-        val clipboard: Clipboard
+        var clipboard: Clipboard
         try {
             val reader: ClipboardReader = format.getReader(FileInputStream(schematicFile))
             clipboard = reader.read()
@@ -61,24 +63,24 @@ class Structure(private val plugin: AgeOfEmpire, private val structureInfoFile: 
         } catch (e: Exception) {
             throw StructureNotLoadedException("File " + schematicFile.absolutePath + " was not found.")
         }
-        for (y in clipboard.minimumPoint.subtract(clipboard.origin).y..-1) { //Construct automatically all blocks under y = 0
+
+        if(!rightSide) clipboard = flipStruture(clipboard, xFlipped)
+
+        val allBlocks: LinkedHashMap<BlockVector3, BaseBlock> = LinkedHashMap()
+        for (y in clipboard.minimumPoint.subtract(clipboard.origin).y until clipboard.minimumPoint.subtract(clipboard.origin).y + height) {
             for (x in 0 until width) {
                 for (z in 0 until length) {
-                    val vector: BlockVector3 = BlockVector3.at(x, y, z).add(clipboard.origin)
-                    val block: BaseBlock = clipboard.getFullBlock(vector)
-                    undergroundBlocks[BlockVector3.at(x, y, z)!!] = block
+                    val vector = BlockVector3.at(x, y, z).add(clipboard.origin)
+                    val block = clipboard.getFullBlock(vector)
+                    if(!block.blockType.material.isAir) {
+                        allBlocks[BlockVector3.at(x, y, z)] = block
+                    }
                 }
             }
         }
-        for (y in 0 until height) { //For y first to have the structure built by layer.
-            for (x in 0 until width) {
-                for (z in 0 until length) {
-                    val vector: BlockVector3 = BlockVector3.at(x, y - 1, z).add(clipboard.origin)
-                    val block: BaseBlock = clipboard.getFullBlock(vector)
-                    if (!block.blockType.material.isAir) blocks[BlockVector3.at(x, y, z)!!] = block
-                }
-            }
-        }
+        undergroundBlocks.putAll(allBlocks.filter { it.key.y < -1})
+        blocks.putAll(allBlocks.filter { it.key.y >= -1})
+
         return this
     }
 
@@ -93,10 +95,9 @@ class Structure(private val plugin: AgeOfEmpire, private val structureInfoFile: 
     fun pastStructure(location: Location, time: Int) {
         if (width == 0 || height == 0 || length == 0 || blocks.isEmpty()) throw StructureNotLoadedException("Data has not been loaded yet")
         try {
-            WorldEdit.getInstance().newEditSession(BukkitWorld(getGameManager().world)).run {
-                for ((key, value) in undergroundBlocks) {
-                    this.setBlock(key.add(location.blockX, location.blockY, location.blockZ), value)
-                }
+            val editSession = WorldEdit.getInstance().newEditSession(BukkitWorld(getGameManager().world))
+            for ((key, value) in undergroundBlocks) {
+                editSession.setBlock(key.add(location.blockX, location.blockY, location.blockZ), value)
             }
         } catch (e: MaxChangedBlocksException) {
             e.printStackTrace()

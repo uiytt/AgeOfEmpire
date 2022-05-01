@@ -22,16 +22,18 @@ class AgeOfEmpire : JavaPlugin() {
         getCommand("ageofempire")!!.tabCompleter = Command()
         server.pluginManager.registerEvents(GameListener(), this)
         server.pluginManager.registerEvents(VillagerListener(), this)
+
         configManager.init()
         configManager.world = Bukkit.getWorld("world")
 
+        gameManager = GameManager()
         //Reorganize teams in case of /reload
         GameTeam.reorganizeTeam()
     }
 
     companion object {
         val configManager = ConfigManager()
-        var gameManager: GameManager = GameManager()
+        lateinit var  gameManager: GameManager
         lateinit var instance: AgeOfEmpire
             private set
         lateinit var log: Logger

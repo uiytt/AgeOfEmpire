@@ -1,5 +1,6 @@
 package fr.uiytt.ageofempire.base
 
+import de.leonhard.storage.Yaml
 import fr.uiytt.ageofempire.AgeOfEmpire
 import fr.uiytt.ageofempire.game.GameTeam
 import fr.uiytt.ageofempire.stringToLocation
@@ -21,17 +22,17 @@ class Plot(teamBase: TeamBase, values: Any) {
     private lateinit var location: Location
     var constructed = false
     var destroyed = false
-    private var side: String = "left"
+    private var rightSide: Boolean = true
     val isPlotAvailable: Boolean
         get() = !constructed && !destroyed
 
 
     init {
         try {
-            val data = values as LinkedHashMap<String, String>
-            size = data["size"]!!.toInt()
-            location = stringToLocation(data["location"]!!)
-            side = data["side"]?: side
+            val data = values as LinkedHashMap<*, *>
+            size = Integer.valueOf(data["size"] as String)
+            location = stringToLocation(data["location"] as String)
+            rightSide = (data["rightside"] as String).toBoolean()
             if (size > 3 || size < 1 || (location.x == 0.0 && location.y == 80.0 && location.z == 0.0))
                 throw Exception("Size or location load error in plot")
             teamBase.plots[location] = this
@@ -51,10 +52,10 @@ class Plot(teamBase: TeamBase, values: Any) {
         building.inConstruction = true
         building.plotLocation = location
         constructed = true
-        val structureFile = File("plugins" + File.separator + "AgeOfEmpire" + File.separator + playerTeam.color.name + File.separator + buildingType.name + ".yml")
-        val structure = Structure(AgeOfEmpire.instance, structureFile, building, side)
+        val structureFile = Yaml("structure.yml", "plugins" + File.separator + "AgeOfEmpire" + File.separator + playerTeam.color.name)
+        val structure = Structure(AgeOfEmpire.instance, structureFile, building, rightSide)
         try {
-            structure.loadStructure().pastStructure(location, buildingType.time)
+            structure.loadStructure().pastStructure(location.add(0.0, 1.0, 0.0), buildingType.time)
         } catch (e: StructureNotLoadedException) {
             e.printStackTrace()
             building.inConstruction = false

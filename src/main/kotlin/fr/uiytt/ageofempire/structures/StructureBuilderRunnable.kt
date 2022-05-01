@@ -20,7 +20,7 @@ import kotlin.math.ceil
  * @param consumerFinish consummer executed when finish
  */
 class StructureBuilderRunnable(
-    structure: Structure,
+    private val structure: Structure,
     private val pasteLocation: Location,
     private val timeToFinish: Int,
     private val consumerFinish: Consumer<Null>?): BukkitRunnable() {
@@ -39,19 +39,19 @@ class StructureBuilderRunnable(
         }
         var vector3: BlockVector3? = null
         try {
-            WorldEdit.getInstance().newEditSession(BukkitWorld(world)).run {
-                for (i in 0 until blocksPerSecond) {
-                    if (!blocks.hasNext()) break
-                    val block = blocks.next()
-                    vector3 = block.key.add(pasteLocation.blockX, pasteLocation.blockY, pasteLocation.blockZ)
-                    this.setBlock(vector3, block.value)
-                }
+            val editSession = WorldEdit.getInstance().newEditSession(BukkitWorld(world))
+            for (i in 0 until blocksPerSecond) {
+                if (!blocks.hasNext()) break
+                val block = blocks.next()
+                vector3 = block.key.add(pasteLocation.blockX, pasteLocation.blockY, pasteLocation.blockZ)
+                editSession.setBlock(vector3, block.value)
             }
+            editSession.close()
         } catch (e: MaxChangedBlocksException) {
             e.printStackTrace()
         }
         if (vector3 != null) {
-            val blockLocation = Location(world, vector3!!.blockX.toDouble(), vector3!!.blockY.toDouble(), vector3!!.blockZ.toDouble())
+            val blockLocation = Location(world, vector3.blockX.toDouble(), vector3.blockY.toDouble(), vector3.blockZ.toDouble())
             world.spawnParticle(Particle.CLOUD, blockLocation, 6)
             world.playEffect(blockLocation, Effect.STEP_SOUND, Material.STONE)
         }

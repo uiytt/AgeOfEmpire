@@ -57,7 +57,7 @@ class Command: CommandExecutor, TabCompleter {
     }
 
     override fun onTabComplete(sender: CommandSender, command: Command, label: String, args: Array<out String>): MutableList<String>? {
-        TODO("Not yet implemented")
+        return null
     }
 
     private fun sendHelp(player: CommandSender) {

@@ -18,7 +18,7 @@ import java.util.function.Consumer
  * @param buildingType a type of building
  * @param teamBase the base to which the building belong
  */
-class Building(private val buildingType: BuildingType, private val teamBase: TeamBase) {
+class Building(val buildingType: BuildingType, private val teamBase: TeamBase) {
     var inConstruction = false
     var isConstructed = false
     var plotLocation = Location(getGameManager().world, 0.0, 0.0, 0.0)
