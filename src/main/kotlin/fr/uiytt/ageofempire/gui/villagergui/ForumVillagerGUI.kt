@@ -41,10 +41,13 @@ class ForumVillagerGUI : VillagerGUI() {
         if (teamBase.age >= 2) {
             contents[2, 2] = buildItemStackForBuilds(BuildingType.MINE, Material.ANDESITE, listOf("&7Vous donne 20 de stone","&7toutes les minutes."))
             contents[2, 3] = buildItemStackForBuilds(BuildingType.SAWMILL, Material.OAK_LOG, listOf("&7Vous donne 20 de bois","&7toutes les minutes."))
+            contents[2, 4] = buildItemStackForBuilds(BuildingType.TRAINING_CAMP, Material.TARGET, listOf("&7Donne de l'xp régulièrement."))
             contents[2, 5] = buildItemStackForBuilds(BuildingType.ARCHERY, Material.BOW, listOf("&7Vous permet d'acheter arcs et boucliers."))
         }
         if (teamBase.age >= 3) {
-            contents[2, 4] = buildItemStackForBuilds(BuildingType.LIBRARY, Material.BOOKSHELF, listOf("&7Vous permet de vous enchanter"))
+            contents[3, 1] = buildItemStackForBuilds(BuildingType.BANK, Material.GOLD_BLOCK, listOf("&7Vends blocs et pommes d'or'"))
+            contents[3, 2] = buildItemStackForBuilds(BuildingType.STABLE, Material.SADDLE, listOf("&7Permet d'avoir des chevaux"))
+            contents[3, 4] = buildItemStackForBuilds(BuildingType.LIBRARY, Material.BOOKSHELF, listOf("&7Vous permet de vous enchanter"))
         }
         val ageItem: ClickableItem = when (teamBase.age) {
             2 -> ClickableItem.of(newItemStack(Material.GOLD_INGOT, "&ePasser à l'âge 3", listOf(
@@ -76,7 +79,7 @@ class ForumVillagerGUI : VillagerGUI() {
             teamBase.wood -= buildingType.woodCost
             teamBase.updateTeamScoreboard()
             player.inventory.addItem(
-                newItemStack(teamBase.gameTeam.color.wool, buildingType.displayName, listOf("&8 ${buildingType.displayName} &8AOE"))
+                newItemStack(teamBase.gameTeam.color.wool, buildingType.displayName, listOf("&8${buildingType.displayName}", "&8AOE"))
             )
         } else player.sendMessage(ChatColor.RED.toString() + "Vous n'avez pas assez de ressources.")
     }

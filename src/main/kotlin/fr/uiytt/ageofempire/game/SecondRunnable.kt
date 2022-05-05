@@ -2,6 +2,7 @@ package fr.uiytt.ageofempire.game
 
 import fr.uiytt.ageofempire.base.BuildingType
 import fr.uiytt.ageofempire.getConfigManager
+import org.bukkit.Bukkit
 import org.bukkit.scheduler.BukkitRunnable
 
 /**
@@ -61,6 +62,12 @@ class SecondRunnable: BukkitRunnable() {
                     gamedata.addGold(it, 20)
                 }
                 team.teamBase.updateTeamScoreboard()
+            }
+            if (buildings[BuildingType.TRAINING_CAMP]!!.isConstructed) {
+                team.playersUUIDs.forEach {
+                    val player = Bukkit.getPlayer(it)
+                    player?.exp = (player?.exp ?: 0f) + 1
+                }
             }
         }
     }
