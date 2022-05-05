@@ -104,7 +104,7 @@ class ForumVillagerGUI : VillagerGUI() {
         lore.add("")
         lore.add("&a" + buildingType.stoneCost + " de pierres")
         lore.add("&a" + buildingType.woodCost + " de bois")
-        return if (AgeOfEmpire.gameManager.teamTemple != null){
+        return if (AgeOfEmpire.gameManager.teamTemple != null && AgeOfEmpire.gameManager.teamTemple != teamBase.gameTeam){
                 ClickableItem.empty(
                     newItemStack(Material.RED_STAINED_GLASS, "&f" + buildingType.displayName, listOf("&cTemple ennemi en jeu"))
                 )
