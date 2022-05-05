@@ -67,7 +67,6 @@ class VillagerListener: Listener {
 
         if(building.health < 0.5){
             (event.entity as Villager).health = 0.0
-            building.explodeBuilding((event.entity as Villager).location)
         }
         else {
             event.entity.customName = villagerGameTeam.color.chatColor.toString() + buildingType.displayName + ChatColor.GRAY + " - " + ChatColor.GREEN + Utils.roundToHalf(building.health)
@@ -97,21 +96,14 @@ class VillagerListener: Listener {
 
         //For the Forum Only
         if (buildingType === BuildingType.FORUM) {
-            villagerTeam.teamBase.isForumAlive = false
-            for (player in Bukkit.getOnlinePlayers()) {
-                player.sendMessage(org.bukkit.ChatColor.GREEN.toString() + "" + org.bukkit.ChatColor.STRIKETHROUGH + "                                         ")
-                player.sendMessage(org.bukkit.ChatColor.RED.toString() + "Le " + buildingType.displayName + " des " + villagerTeam.color.chatColor + villagerTeam.name + org.bukkit.ChatColor.RED + " vient d'etre détruit.")
-                player.sendMessage(org.bukkit.ChatColor.WHITE.toString() + "Les joueurs de cette équipe ne peuvent plus respawn.")
-                player.sendMessage(org.bukkit.ChatColor.GREEN.toString() + "" + org.bukkit.ChatColor.STRIKETHROUGH + "                                         ")
-                player.playSound(player.location, Sound.ENTITY_WITHER_DEATH, 1f, 1f)
-            }
+            villagerTeam.destroyForum()
             return
         }
 
         //For the rest of the buildings
         val building = villagerTeam.teamBase.builds[buildingType]!!
-        building.isConstructed = false
-        building.explodeBuilding(event.entity.location)
+
+        building.explodeBuilding()
         for (playerUUID in villagerTeam.playersUUIDs) {
             val player = Bukkit.getPlayer(playerUUID)
             if (player != null) {

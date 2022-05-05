@@ -1,6 +1,8 @@
 package fr.uiytt.ageofempire.game
 
 import fr.uiytt.ageofempire.AgeOfEmpire
+import fr.uiytt.ageofempire.base.Building
+import fr.uiytt.ageofempire.base.BuildingType
 import fr.uiytt.ageofempire.getConfigManager
 import fr.uiytt.ageofempire.utils.PlayerFromUUIDNotFoundException
 import org.bukkit.*
@@ -186,6 +188,10 @@ class GameManager {
         teamRunnable = object: BukkitRunnable() {
             override fun run() {
                 for(team in gameData.teams){
+                    val villager = team.teamBase.builds[BuildingType.FORUM]!!.villager!!
+                    villager.world.strikeLightningEffect(villager.location)
+                    team.teamBase.builds[BuildingType.FORUM]!!.explodeBuilding()
+                    team.destroyForum()
                     if(teamTemple != null && team != teamTemple){
                         for(player in team.playersUUIDs.map { uuid -> Bukkit.getPlayer(uuid) }){
                             if(player != null){
