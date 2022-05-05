@@ -30,16 +30,18 @@ class Building(val buildingType: BuildingType, private val teamBase: TeamBase) {
         get() = !inConstruction && !isConstructed
     private var timeOfLastWarning = System.currentTimeMillis()
 
-    fun summonBuildingVillager(villagerLocation: Location) {
+    fun summonBuildingVillager(villagerLocation: Location, silent: Boolean = false) {
         villager = villagerLocation.world!!.spawnEntity(villagerLocation, EntityType.VILLAGER) as Villager
         villager!!.health = 20.0
         villager!!.customName = teamBase.gameTeam.color.chatColor.toString() + buildingType.displayName + ChatColor.GRAY + " - " + ChatColor.GREEN + health
         villager!!.setAI(false)
         villager!!.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE)!!.baseValue = 100.0
-        teamBase.gameTeam.playersUUIDs.forEach(Consumer { playerUUID: UUID? ->
-            val player = Bukkit.getPlayer(playerUUID!!)
-            player?.sendMessage("Bâtiment " + buildingType.displayName + " construit.")
-        })
+        if(!silent) {
+            teamBase.gameTeam.playersUUIDs.forEach(Consumer { playerUUID: UUID? ->
+                val player = Bukkit.getPlayer(playerUUID!!)
+                player?.sendMessage("Bâtiment " + buildingType.displayName + " construit.")
+            })
+        }
 
         if (buildingType == BuildingType.TEMPLE){
             AgeOfEmpire.gameManager.triggerTemple(teamBase.gameTeam)

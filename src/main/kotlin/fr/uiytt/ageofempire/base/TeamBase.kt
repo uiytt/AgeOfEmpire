@@ -34,14 +34,7 @@ class TeamBase(val gameTeam: GameTeam) {
         }
         yamlBase.getList("plots").forEach {Plot(this, it!!)}
         val building = builds[BuildingType.FORUM]!!
-        val villager = getGameManager().world.spawnEntity(
-            stringToLocation(yamlBase.getOrDefault("villager", "13 70 0")),
-            EntityType.VILLAGER
-        ) as Villager
-        villager.health = 20.0
-        villager.customName = gameTeam.color.chatColor.toString() + BuildingType.FORUM.displayName + ChatColor.GRAY + " - " + ChatColor.GREEN + building.health
-        villager.setAI(false)
-        villager.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE)!!.baseValue = 100.0
+        building.summonBuildingVillager(stringToLocation(yamlBase.getOrDefault("villager", "13 70 0")), true)
     }
 
     /**

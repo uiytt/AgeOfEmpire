@@ -188,23 +188,30 @@ class GameManager {
         teamRunnable = object: BukkitRunnable() {
             override fun run() {
                 for(team in gameData.teams){
-                    val villager = team.teamBase.builds[BuildingType.FORUM]!!.villager!!
-                    villager.world.strikeLightningEffect(villager.location)
-                    team.teamBase.builds[BuildingType.FORUM]!!.explodeBuilding()
-                    team.destroyForum()
                     if(teamTemple != null && team != teamTemple){
-                        for(player in team.playersUUIDs.map { uuid -> Bukkit.getPlayer(uuid) }){
-                            if(player != null){
-                                player.world.strikeLightningEffect(player.location)
-                                player.health = 0.0
+                        val villager = team.teamBase.builds[BuildingType.FORUM]!!.villager!!
+                        villager.world.strikeLightningEffect(villager.location)
+                        villager.health = 0.0
+
+                        val after1Tick = object: BukkitRunnable(){
+                            override fun run(){
+                                for(player in team.playersUUIDs.map { uuid -> Bukkit.getPlayer(uuid) }){
+                                    if(player != null){
+                                        player.world.strikeLightningEffect(player.location)
+                                        player.health = 0.0
+                                    }
+                                }
                             }
                         }
+
+                        after1Tick.runTaskLater(AgeOfEmpire.instance, 1)
+
                     }
                 }
             }
         }
 
-        teamRunnable.runTaskLater(AgeOfEmpire.instance, 20 * 60 * 12)
+        teamRunnable.runTaskLater(AgeOfEmpire.instance, 20 * 1 * 12)
 
     }
 
