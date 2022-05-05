@@ -65,7 +65,10 @@ class VillagerListener: Listener {
         building.health -= event.damage
         event.damage = 0.0
 
-        if(building.health < 0.5) (event.entity as Villager).health = 0.0
+        if(building.health < 0.5){
+            (event.entity as Villager).health = 0.0
+            building.explodeBuilding((event.entity as Villager).location)
+        }
         else {
             event.entity.customName = villagerGameTeam.color.chatColor.toString() + buildingType.displayName + ChatColor.GRAY + " - " + ChatColor.GREEN + Utils.roundToHalf(building.health)
             villagerGameTeam.teamBase.builds[buildingType]?.sendWarning()

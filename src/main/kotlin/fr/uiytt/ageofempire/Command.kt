@@ -39,7 +39,7 @@ class Command: CommandExecutor, TabCompleter {
                 TeamGui().openGUI(sender)
             }
             "test" -> {
-                if (sender !is Player || getGameManager().isRunning()) return false
+                if (sender !is Player || !getGameManager().isRunning()) return false
                 val playerTeam: GameTeam = sender.uniqueId.getPlayerTeam()!!
                 playerTeam.teamBase.age += 1
             }

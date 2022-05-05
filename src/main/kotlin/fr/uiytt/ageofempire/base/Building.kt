@@ -1,6 +1,8 @@
 package fr.uiytt.ageofempire.base
 
+import fr.uiytt.ageofempire.AgeOfEmpire
 import fr.uiytt.ageofempire.game.getGameManager
+import fr.uiytt.ageofempire.game.getPlayerTeam
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Location
@@ -37,6 +39,10 @@ class Building(val buildingType: BuildingType, private val teamBase: TeamBase) {
             val player = Bukkit.getPlayer(playerUUID!!)
             player?.sendMessage("Bâtiment " + buildingType.displayName + " construit.")
         })
+
+        if (buildingType == BuildingType.TEMPLE){
+            AgeOfEmpire.gameManager.triggerTemple(teamBase.gameTeam)
+        }
     }
 
     fun sendWarning() {
@@ -53,6 +59,10 @@ class Building(val buildingType: BuildingType, private val teamBase: TeamBase) {
         plot.destroyed = true
         plot.constructed = false
         villagerLoc.world!!.spawnEntity(villagerLoc, EntityType.PRIMED_TNT)
+
+        if(buildingType == BuildingType.TEMPLE){
+            AgeOfEmpire.gameManager.destroyTemple()
+        }
     }
 
 }

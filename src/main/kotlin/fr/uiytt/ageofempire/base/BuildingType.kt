@@ -30,7 +30,8 @@ enum class BuildingType(
     LIBRARY("Bibliothèque", 3, 320, 250, 2, 1100.0, 180, Consumer { player: Player -> LibraryVillagerGUI().open(player) }),
     ARCHERY("Archerie", 2, 200, 300, 2, 700.0, 150, Consumer { player: Player -> ArcheryVillagerGUI().open(player) }),
     BANK("Banque", 3, 400, 220, 2, 800.0, 200, Consumer { }),
-    STABLE("Écurie", 3, 100, 400, 2, 700.0, 125, Consumer { player: Player -> StableVillagerGUI().open(player) });
+    STABLE("Écurie", 3, 100, 400, 2, 700.0, 125, Consumer { player: Player -> StableVillagerGUI().open(player) }),
+    TEMPLE("Temple", 4, 1000, 1000, 3, 1000.0, 300, Consumer { } );
 
     fun openVillagerInventory(player: Player) {
         openVillagerInventory.accept(player)

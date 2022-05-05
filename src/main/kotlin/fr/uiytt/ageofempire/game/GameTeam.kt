@@ -63,6 +63,12 @@ class GameTeam(val color: ColorLink, val name: String) {
         playersUUIDs.clear()
     }
 
+    fun broadcastMessage(s: String) {
+        for(player in playersUUIDs.map { uuid -> Bukkit.getPlayer(uuid) }){
+            player?.sendMessage(s)
+        }
+    }
+
     companion object {
         @JvmStatic
         fun removePlayerFromAllTeams(playerUUID: UUID) {
