@@ -1,9 +1,11 @@
 package fr.uiytt.ageofempire.game
 
+import fr.uiytt.ageofempire.base.BuildingType
 import fr.uiytt.ageofempire.base.TeamBase
 import fr.uiytt.ageofempire.utils.ColorLink
 import fr.uiytt.ageofempire.utils.PlayerFromUUIDNotFoundException
 import org.bukkit.Bukkit
+import org.bukkit.Sound
 import org.bukkit.entity.Player
 import java.util.*
 
@@ -61,6 +63,23 @@ class GameTeam(val color: ColorLink, val name: String) {
     fun removeAllPlayers() {
         playersUUIDs.forEach { playersUUIDs.remove(it) }
         playersUUIDs.clear()
+    }
+
+    fun broadcastMessage(s: String) {
+        for(player in playersUUIDs.map { uuid -> Bukkit.getPlayer(uuid) }){
+            player?.sendMessage(s)
+        }
+    }
+
+    fun destroyForum() {
+        this.teamBase.isForumAlive = false
+        Bukkit.broadcastMessage(org.bukkit.ChatColor.GREEN.toString() + "" + org.bukkit.ChatColor.STRIKETHROUGH + "                                         ")
+        Bukkit.broadcastMessage(org.bukkit.ChatColor.RED.toString() + "Le " + BuildingType.FORUM.displayName + " des " + this.color.chatColor + this.name + org.bukkit.ChatColor.RED + " vient d'etre détruit.")
+        Bukkit.broadcastMessage(org.bukkit.ChatColor.WHITE.toString() + "Les joueurs de cette équipe ne peuvent plus respawn.")
+        Bukkit.broadcastMessage(org.bukkit.ChatColor.GREEN.toString() + "" + org.bukkit.ChatColor.STRIKETHROUGH + "                                         ")
+        for (player in Bukkit.getOnlinePlayers()) {
+            player.playSound(player.location, Sound.ENTITY_WITHER_DEATH, 1f, 1f)
+        }
     }
 
     companion object {

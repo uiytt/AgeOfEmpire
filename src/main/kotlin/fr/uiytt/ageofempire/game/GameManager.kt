@@ -1,6 +1,8 @@
 package fr.uiytt.ageofempire.game
 
 import fr.uiytt.ageofempire.AgeOfEmpire
+import fr.uiytt.ageofempire.base.Building
+import fr.uiytt.ageofempire.base.BuildingType
 import fr.uiytt.ageofempire.getConfigManager
 import fr.uiytt.ageofempire.utils.PlayerFromUUIDNotFoundException
 import org.bukkit.*
@@ -14,6 +16,9 @@ import java.util.*
 import java.util.function.Consumer
 
 class GameManager {
+
+    var teamTemple: GameTeam? = null
+    private lateinit var teamRunnable: BukkitRunnable
     val gameData: GameData = GameData()
     val world: World = getConfigManager().world!!
 
@@ -170,6 +175,52 @@ class GameManager {
                 }.runTask(AgeOfEmpire.instance)
             }
         }.runTaskAsynchronously(AgeOfEmpire.instance)
+    }
+
+    fun triggerTemple(gameTeam: GameTeam) {
+        for(team in gameData.teams){
+            if(team != gameTeam) {
+                team.broadcastMessage("L'équipe ${gameTeam.name} a construit un temple! Vous avez 12 minutes avant que la colère de Dieu ne s'abatte sur vous!")
+                team.broadcastMessage("Vous ne pouvez plus construire de bâtiments tant que le temple est encore debout!")
+            }
+        }
+        this.teamTemple = gameTeam
+        teamRunnable = object: BukkitRunnable() {
+            override fun run() {
+                for(team in gameData.teams){
+                    if(teamTemple != null && team != teamTemple){
+                        val villager = team.teamBase.builds[BuildingType.FORUM]!!.villager!!
+                        villager.world.strikeLightningEffect(villager.location)
+                        villager.health = 0.0
+
+                        val after1Tick = object: BukkitRunnable(){
+                            override fun run(){
+                                for(player in team.playersUUIDs.map { uuid -> Bukkit.getPlayer(uuid) }){
+                                    if(player != null){
+                                        player.world.strikeLightningEffect(player.location)
+                                        player.health = 0.0
+                                    }
+                                }
+                            }
+                        }
+
+                        after1Tick.runTaskLater(AgeOfEmpire.instance, 1)
+
+                    }
+                }
+            }
+        }
+
+        teamRunnable.runTaskLater(AgeOfEmpire.instance, 20 * 1 * 12)
+
+    }
+
+    fun destroyTemple() {
+        if(teamTemple != null){
+            teamRunnable.cancel()
+            Bukkit.broadcastMessage("Le temple de l'équipe ${teamTemple!!.name} a été détruit!")
+            teamTemple = null
+        }
     }
 
     /**

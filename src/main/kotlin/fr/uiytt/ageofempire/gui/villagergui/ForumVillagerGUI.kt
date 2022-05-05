@@ -37,18 +37,14 @@ class ForumVillagerGUI : VillagerGUI() {
         contents[1, 3] = buildItemStackForBuilds(BuildingType.FORGE, Material.ANVIL, listOf("&7Vous permet d'acheter des", "&7armes et des outils."))
         contents[1, 4] = buildItemStackForBuilds(BuildingType.MILL, Material.BREAD, listOf("&7Vous permet d'acheter de", "&7la nourriture."))
         contents[1, 5] = buildItemStackForBuilds(BuildingType.ARMORY, Material.IRON_CHESTPLATE, listOf("&7Vous permet d'achter des", "&7armures."))
-
-        if (teamBase.age >= 2) {
-            contents[2, 2] = buildItemStackForBuilds(BuildingType.MINE, Material.ANDESITE, listOf("&7Vous donne 20 de stone","&7toutes les minutes."))
-            contents[2, 3] = buildItemStackForBuilds(BuildingType.SAWMILL, Material.OAK_LOG, listOf("&7Vous donne 20 de bois","&7toutes les minutes."))
-            contents[2, 4] = buildItemStackForBuilds(BuildingType.TRAINING_CAMP, Material.TARGET, listOf("&7Donne de l'xp régulièrement."))
-            contents[2, 5] = buildItemStackForBuilds(BuildingType.ARCHERY, Material.BOW, listOf("&7Vous permet d'acheter arcs et boucliers."))
-        }
-        if (teamBase.age >= 3) {
-            contents[3, 1] = buildItemStackForBuilds(BuildingType.BANK, Material.GOLD_BLOCK, listOf("&7Vends blocs et pommes d'or'"))
-            contents[3, 2] = buildItemStackForBuilds(BuildingType.STABLE, Material.SADDLE, listOf("&7Permet d'avoir des chevaux"))
-            contents[3, 4] = buildItemStackForBuilds(BuildingType.LIBRARY, Material.BOOKSHELF, listOf("&7Vous permet de vous enchanter"))
-        }
+        contents[2, 2] = buildItemStackForBuilds(BuildingType.MINE, Material.ANDESITE, listOf("&7Vous donne 20 de stone","&7toutes les minutes."))
+        contents[2, 3] = buildItemStackForBuilds(BuildingType.SAWMILL, Material.OAK_LOG, listOf("&7Vous donne 20 de bois","&7toutes les minutes."))
+        contents[2, 4] = buildItemStackForBuilds(BuildingType.TRAINING_CAMP, Material.TARGET, listOf("&7Donne de l'xp régulièrement."))
+        contents[2, 5] = buildItemStackForBuilds(BuildingType.ARCHERY, Material.BOW, listOf("&7Vous permet d'acheter arcs et boucliers."))
+        contents[2, 6] = buildItemStackForBuilds(BuildingType.BANK, Material.GOLD_BLOCK, listOf("&7Vends blocs et pommes d'or'"))
+        contents[3, 3] = buildItemStackForBuilds(BuildingType.STABLE, Material.SADDLE, listOf("&7Permet d'avoir des chevaux"))
+        contents[3, 5] = buildItemStackForBuilds(BuildingType.LIBRARY, Material.BOOKSHELF, listOf("&7Vous permet de vous enchanter"))
+        contents[3, 4] = buildItemStackForBuilds(BuildingType.TEMPLE, Material.BEACON, listOf("&7Provoque la colère de Dieu sur vos adversaires après 12 minutes"))
         val ageItem: ClickableItem = when (teamBase.age) {
             2 -> ClickableItem.of(newItemStack(Material.GOLD_INGOT, "&ePasser à l'âge 3", listOf(
                             "&7&lÂGE 3 :",
@@ -108,7 +104,11 @@ class ForumVillagerGUI : VillagerGUI() {
         lore.add("")
         lore.add("&a" + buildingType.stoneCost + " de pierres")
         lore.add("&a" + buildingType.woodCost + " de bois")
-        return if (buildingType.age > teamBase.age) {
+        return if (AgeOfEmpire.gameManager.teamTemple != null && AgeOfEmpire.gameManager.teamTemple != teamBase.gameTeam){
+                ClickableItem.empty(
+                    newItemStack(Material.RED_STAINED_GLASS, "&f" + buildingType.displayName, listOf("&cTemple ennemi en jeu"))
+                )
+        } else if (buildingType.age > teamBase.age) {
             ClickableItem.empty(
                 newItemStack(Material.WHITE_STAINED_GLASS_PANE, "&f" + buildingType.displayName + "&7 - Age " + buildingType.age, lore))
         } else if (building != null && !building.isAvailable) {
