@@ -14,17 +14,14 @@ import org.bukkit.Bukkit
 import org.bukkit.GameMode
 import org.bukkit.Material
 import org.bukkit.Tag
-import org.bukkit.block.Block
 import org.bukkit.entity.Arrow
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockBreakEvent
-import org.bukkit.event.block.BlockFormEvent
 import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.entity.EntityDamageByEntityEvent
-import org.bukkit.event.entity.EntityExplodeEvent
 import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.player.AsyncPlayerChatEvent
 import org.bukkit.event.player.PlayerJoinEvent
@@ -32,7 +29,7 @@ import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.scheduler.BukkitRunnable
 
-class GameListener : Listener {
+class PlayerListener : Listener {
     @EventHandler
     fun onPlayerJoin(event: PlayerJoinEvent) {
         val team: GameTeam? = event.player.uniqueId.getPlayerTeam()
@@ -87,13 +84,6 @@ class GameListener : Listener {
         event.isCancelled = false
         event.block.type = Material.AIR
         plot.build(playerTeam, buildingType, building)
-    }
-
-    @EventHandler
-    fun onExplosion(event: EntityExplodeEvent) {
-        if (!getGameManager().isRunning()) return
-        event.yield = 0f
-        event.blockList().removeIf { block: Block -> Tag.WOOL.isTagged(block.type) }
     }
 
     @EventHandler
@@ -169,14 +159,10 @@ class GameListener : Listener {
                     )
                 )
             } else {
-                gameTeam.playersUUIDs.forEach {
-                    Bukkit.getPlayer(it)?.sendMessage(
-                        ChatColor.translateAlternateColorCodes(
-                            '&',
-                            "&8&l[" + gameTeam.color.chatColor + "EQUIPE&8&l] &e" + event.player.displayName + "&7: " + event.message
-                        )
-                    )
-                }
+                gameTeam.broadcastMessage(ChatColor.translateAlternateColorCodes(
+                    '&',
+                    "&8&l[" + gameTeam.color.chatColor + "EQUIPE&8&l] &e" + event.player.displayName + "&7: " + event.message
+                ))
             }
         } else {
             for (onlinePlayer in Bukkit.getOnlinePlayers()) {
@@ -196,11 +182,5 @@ class GameListener : Listener {
             if (arrow.shooter !is Player) return
         } else if (event.damager !is Player) return
         event.isCancelled = true
-    }
-
-    @EventHandler
-    fun onObsidianForming(event: BlockFormEvent) {
-        if (!getGameManager().isRunning() || event.newState.block.type != Material.OBSIDIAN) return
-        event.newState.type = Material.AIR
     }
 }
