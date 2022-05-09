@@ -21,6 +21,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockBreakEvent
+import org.bukkit.event.block.BlockFormEvent
 import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityExplodeEvent
@@ -136,7 +137,7 @@ class GameListener : Listener {
         event.drops.removeIf { itemStack: ItemStack -> getConfigManager().getSetOfDeletedDrops().contains(itemStack.type) }
         deadPlayer.gameMode = GameMode.SPECTATOR
 
-        if (gameTeam.teamBase.isForumAlive) {
+        if (gameTeam.teamBase.  isForumAlive) {
             object : BukkitRunnable() {
                 override fun run() {
                     deadPlayer.gameMode = GameMode.SURVIVAL
@@ -195,5 +196,11 @@ class GameListener : Listener {
             if (arrow.shooter !is Player) return
         } else if (event.damager !is Player) return
         event.isCancelled = true
+    }
+
+    @EventHandler
+    fun onObsidianForming(event: BlockFormEvent) {
+        if (!getGameManager().isRunning() || event.newState.block.type != Material.OBSIDIAN) return
+        event.newState.type = Material.AIR
     }
 }

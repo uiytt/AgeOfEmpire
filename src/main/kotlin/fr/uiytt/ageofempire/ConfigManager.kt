@@ -19,10 +19,14 @@ class ConfigManager {
     fun init() {
         breakableBlocks.addAll(Tag.OAK_LOGS.values)
         breakableBlocks.addAll(Tag.PLANKS.values)
-        deletedDrops.addAll(Tag.WOOL.values)
-        deletedDrops.addAll(Tag.ITEMS_STONE_TOOL_MATERIALS.values)
         breakableBlocks.add(Material.SEA_LANTERN)
         breakableBlocks.add(Material.CAKE)
+        breakableBlocks.add(Material.LILY_PAD)
+        breakableBlocks.add(Material.END_STONE)
+        breakableBlocks.add(Material.COBWEB)
+
+        deletedDrops.addAll(Tag.WOOL.values)
+        deletedDrops.addAll(Tag.ITEMS_STONE_TOOL_MATERIALS.values)
         deletedDrops.add(Material.LEATHER_HELMET)
         deletedDrops.add(Material.LEATHER_CHESTPLATE)
         deletedDrops.add(Material.LEATHER_LEGGINGS)
