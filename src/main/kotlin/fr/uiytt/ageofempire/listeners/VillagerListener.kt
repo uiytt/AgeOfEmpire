@@ -52,7 +52,7 @@ class VillagerListener: Listener {
         if(villagerGameTeam == null) return 
 
         //Check if player attacking is on the same team of the villager
-        if(event.damager.uniqueId.getPlayerTeam()?.color != colorLink) {
+        if(event.damager.uniqueId.getPlayerTeam()?.color == colorLink) {
             event.isCancelled = true
             return 
         }
