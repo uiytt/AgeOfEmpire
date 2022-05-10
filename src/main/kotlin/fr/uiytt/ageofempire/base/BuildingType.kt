@@ -33,7 +33,8 @@ enum class BuildingType(
     STABLE("Écurie", 3, 100, 400, 2, 700.0, 125, Consumer { player: Player -> StableVillagerGUI().open(player) }),
     TEMPLE("Temple", 4, 1000, 1000, 3, 1000.0, 2, Consumer { } ),
     TRAINING_CAMP("Centre d'entrainement", 2, 200, 300, 3, 1000.0, 250, Consumer { }),
-    MARKET("Marché", 2, 50, 300, 2, 600.0, 150, Consumer {player: Player -> MarketVillagerGui().open(player)});
+    MARKET("Marché", 2, 50, 300, 2, 600.0, 150, Consumer {player: Player -> MarketVillagerGui().open(player)}),
+    LABORATORY("Laboratoire", 4, 350, 300, 2, 500.0, 200, Consumer {player: Player -> LaboratoryVillagerGUI().open(player)});
 
     fun openVillagerInventory(player: Player) {
         openVillagerInventory.accept(player)
