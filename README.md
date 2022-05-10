@@ -12,13 +12,13 @@ AgeOfEmpire will be 100% free (including buildings and the map) once it's done. 
 
 *Note that me and the builders are working with a content creator, which means there will be a short period where the plugin is only available to the creator before it becomes available to everyone.*
 
-|Part | Progression | Name |
-|------|-------------| ----- |
-|Plugin|65%|uiytt, kumakuma215|
-|Configuration| 0% | Not started| 
-|Builds|60%|Xaymoh, Gabi___ and Aeifka|
-|Map| 0% | **Searching for someone**|
-|Translation|0% | Not started|
+|Part | Progression | Name                       |
+|------|-------------|----------------------------|
+|Plugin| 85%         | uiytt, kumakuma215         |
+|Configuration| 20%         | Not started                | 
+|Builds| 100%        | Xaymoh, Gabi___ and Aeifka |
+|Map| 0%          | Utocraft                   |
+|Translation| 0%          | Not started                |
 
 Once done the plugin will be availabe on [SpigotMC](www.spigotmc.org)
 
